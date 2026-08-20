@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>菲律宾少林文化中心 · 首课体能测试表</title>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js" defer></script>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: "Microsoft YaHei","PingFang SC",Arial,sans-serif;
+  background: #f5f1ec; color: #222; padding: 24px;
+}
+.page-title { text-align:center; color:#6b3a17; margin-bottom:18px; font-size:22px; font-weight:bold; }
+.layout { display:grid; grid-template-columns:380px 1fr; gap:24px; max-width:1280px; margin:0 auto; }
+@media (max-width:960px) { .layout { grid-template-columns:1fr; } }
+
+/* ===== 表单面板 ===== */
+.form-panel {
+  background:#fff; border-radius:12px; padding:18px 18px 12px;
+  box-shadow:0 4px 16px rgba(0,0,0,.08); height:fit-content;
+  position:sticky; top:16px;
+}
+.form-panel h2 { color:#6b3a17; margin-bottom:12px; font-size:16px; border-bottom:2px solid #e3c79e; padding-bottom:6px; }
+.form-panel fieldset { border:1px solid #e0d7cb; border-radius:8px; padding:10px 12px; margin-bottom:12px; }
+.form-panel legend { color:#6b3a17; font-weight:bold; padding:0 6px; font-size:13px; }
+.field { display:flex; flex-direction:column; margin-bottom:8px; }
+.field label { font-size:12px; color:#6b3a17; margin-bottom:3px; }
+.field input,.field select,.field textarea {
+  padding:6px 8px; border:1px solid #d4c5b3; border-radius:6px;
+  font-size:13px; background:#faf7f2; font-family:inherit;
+}
+.field input:focus,.field select:focus,.field textarea:focus { outline:none; border-color:#6b3a17; background:#fff; }
+.field textarea { resize:vertical; min-height:50px; }
+/* 性格词汇标签 */
+.word-bank { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:6px; padding:8px; background:#fdf9f2; border:1px dashed #d4c5b3; border-radius:8px; }
+.word-bank .tag {
+  padding:3px 10px; border:1.5px solid #c4a882; border-radius:14px;
+  font-size:12px; cursor:pointer; user-select:none; transition:all .18s;
+  background:#fff; color:#6b3a17; white-space:nowrap;
+}
+.word-bank .tag:hover { background:#f0e4d2; border-color:#6b3a17; }
+.word-bank .tag.active {
+  background:#6b3a17; color:#fff; border-color:#6b3a17;
+  box-shadow:0 1px 3px rgba(107,58,23,.3);
+}
+.row-2 { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.row-3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; }
+.actions { display:flex; gap:8px; margin-top:12px; flex-wrap:wrap; }
+.btn {
+  padding:10px 14px; border:none; border-radius:6px; cursor:pointer;
+  font-size:14px; font-weight:bold; font-family:inherit; transition:all .2s;
+}
+.btn-primary { background:#6b3a17; color:#fff; flex:1; }
+.btn-primary:hover { background:#8b4d22; }
+.btn-accent { background:#2e7d32; color:#fff; flex:1; }
+.btn-accent:hover { background:#388e3c; }
+.btn-secondary { background:#e0d7cb; color:#6b3a17; flex:1; }
+.btn-secondary:hover { background:#d0c4b3; }
+.btn-sm { padding:6px 12px; font-size:12px; }
+
+/* ===== 预览区 ===== */
+.preview-wrap {
+  background:#fff; border-radius:12px; padding:24px;
+  box-shadow:0 4px 16px rgba(0,0,0,.08);
+}
+.preview-header {
+  display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;
+}
+.preview-header h2 { color:#6b3a17; font-size:16px; }
+.preview-header .hint { font-size:12px; color:#888; }
+
+/* ===== 测试表卡片 ===== */
+.form-card {
+  width:720px; max-width:100%; margin:0 auto;
+  border:3px solid #b76d2c; background:#fff;
+  font-family:"Microsoft YaHei","PingFang SC",Arial,sans-serif; margin-bottom:16px;
+}
+.logo-row { text-align:center; padding:18px 12px 10px; border-bottom:1.5px solid #b76d2c; background:#fff; }
+.logo-circle {
+  width:76px; height:76px; margin:0 auto 8px; border-radius:50%;
+  background:#fff; border:2px solid #6b3a17;
+  display:flex; align-items:center; justify-content:center;
+  font-size:36px; color:#6b3a17;
+}
+.form-title-cn { font-size:18px; font-weight:bold; letter-spacing:2px; color:#1a1a1a; }
+.form-title-en { font-size:13px; letter-spacing:1px; color:#1a1a1a; margin-top:4px; }
+.meta-row { display:grid; grid-template-columns:1fr 1fr 1fr; border-bottom:1.5px solid #b76d2c; }
+.meta-cell { padding:8px 10px; text-align:center; font-size:13px; border-right:1px solid #b76d2c; }
+.meta-cell:last-child { border-right:none; }
+.meta-cell .label { color:#1a1a1a; }
+.meta-cell .value { color:#444; font-weight:normal; margin-left:4px; }
+.info-table { width:100%; border-collapse:collapse; table-layout:fixed; }
+.info-table td { border:1px solid #b76d2c; padding:6px 8px; font-size:13px; vertical-align:middle; height:36px; }
+.label-cell { background:#fff; color:#1a1a1a; text-align:left; line-height:1.3; }
+.label-cell .cn { display:block; }
+.label-cell .en { display:block; font-size:11px; color:#555; }
+.section-title { background:#b76d2c; color:#fff; text-align:center; padding:7px; font-weight:bold; }
+.section-title .cn { font-size:14px; letter-spacing:6px; }
+.section-title .en { display:block; font-size:11px; letter-spacing:1px; margin-top:2px; font-weight:normal; }
+.test-table { width:100%; border-collapse:collapse; table-layout:fixed; }
+.test-table td { border:1px solid #b76d2c; padding:6px 8px; font-size:13px; vertical-align:middle; height:32px; }
+.test-table .name-cell { width:38%; color:#1a1a1a; line-height:1.3; }
+.test-table .name-cell .cn { margin-right:4px; }
+.test-table .name-cell .en { font-size:11px; color:#555; }
+.test-table .result-cell { color:#333; }
+.test-table .unit-cell { text-align:right; color:#555; font-size:11px; }
+.empty { color:#b0a99f; }
+
+/* ===== 体能分析报告卡片 ===== */
+.analysis-card {
+  width:720px; max-width:100%; margin:20px auto 12px;
+  border:3px solid #6b3a17; background:#fff;
+  font-family:"Microsoft YaHei","PingFang SC",Arial,sans-serif; position:relative;
+}
+.analysis-header { text-align:center; padding:16px 12px 10px; background:#fff; border-bottom:2px solid #b76d2c; }
+.analysis-header .ah-cn { font-size:18px; font-weight:bold; letter-spacing:2px; color:#1a1a1a; }
+.analysis-header .ah-en { font-size:12px; color:#555; margin-top:3px; }
+.analysis-meta {
+  display:flex; justify-content:space-around; flex-wrap:wrap;
+  padding:10px 12px; background:#faf7f2; border-bottom:1.5px solid #b76d2c;
+  font-size:13px; color:#444; gap:8px;
+}
+.analysis-meta b { color:#6b3a17; }
+
+.overall-banner { padding:14px 20px; text-align:center; color:#fff; font-weight:bold; }
+.overall-banner.grade-A { background:#2e7d32; }
+.overall-banner.grade-B { background:#1565c0; }
+.overall-banner.grade-C { background:#ef6c00; }
+.overall-banner.grade-D { background:#c62828; }
+.ob-grade { font-size:20px; letter-spacing:3px; }
+.ob-score { font-size:14px; margin-top:4px; font-weight:normal; opacity:.9; }
+
+.analysis-body { display:flex; gap:16px; padding:16px; align-items:flex-start; }
+.radar-wrap { flex-shrink:0; }
+.result-table { flex:1; border-collapse:collapse; table-layout:fixed; font-size:13px; }
+.result-table th { background:#6b3a17; color:#fff; padding:7px 6px; text-align:center; font-size:12px; }
+.result-table td { border:1px solid #b76d2c; padding:6px 8px; text-align:center; }
+.result-table .td-name { text-align:left; }
+.result-table .grade-A-color { color:#2e7d32; font-weight:bold; }
+.result-table .grade-B-color { color:#1565c0; font-weight:bold; }
+.result-table .grade-C-color { color:#ef6c00; font-weight:bold; }
+.result-table .grade-D-color { color:#c62828; font-weight:bold; }
+
+/* ===== 家长通俗版能力条 ===== */
+.parent-bars { padding:14px 16px; border-top:1.5px solid #e3c79e; }
+.parent-bars h4 { color:#6b3a17; margin-bottom:10px; font-size:14px; display:flex; align-items:center; gap:6px; }
+.pbar-row { display:flex; align-items:center; margin-bottom:10px; gap:8px; }
+.pbar-label { width:130px; font-size:12px; color:#6b3a17; text-align:right; flex-shrink:0; line-height:1.3; }
+.pbar-label .cn { font-weight:bold; }
+.pbar-label .what { font-size:10px; color:#999; display:block; }
+.pbar-track { flex:1; height:22px; background:#f0e8d8; border-radius:11px; overflow:hidden; position:relative; }
+.pbar-fill { height:100%; border-radius:11px; transition:width .5s ease; position:relative; min-width:24px; }
+.pbar-fill.level-A { background:linear-gradient(90deg,#43a047,#66bb6a); }
+.pbar-fill.level-B { background:linear-gradient(90deg,#1e88e5,#42a5f5); }
+.pbar-fill.level-C { background:linear-gradient(90deg,#fb8c00,#ffa726); }
+.pbar-fill.level-D { background:linear-gradient(90deg,#e53935,#ef5350); }
+.pbar-emoji { width:28px; font-size:18px; text-align:center; flex-shrink:0; }
+.pbar-score { width:36px; font-size:12px; color:#6b3a17; font-weight:bold; text-align:center; flex-shrink:0; }
+
+/* 家长解读摘要 */
+.parent-summary { margin:14px 16px; padding:14px; background:#fdf8f0; border:1.5px solid #e3c79e; border-radius:10px; }
+.parent-summary h4 { color:#6b3a17; margin-bottom:8px; font-size:14px; }
+.parent-summary .summary-text { font-size:13px; color:#444; line-height:1.8; }
+.parent-summary .highlight-good { color:#2e7d32; font-weight:bold; }
+.parent-summary .highlight-weak { color:#c62828; font-weight:bold; }
+.parent-summary .tag-strength { display:inline-block; background:#e8f5e9; color:#2e7d32; padding:2px 8px; border-radius:10px; font-size:12px; margin:2px 3px; }
+.parent-summary .tag-weakness { display:inline-block; background:#ffebee; color:#c62828; padding:2px 8px; border-radius:10px; font-size:12px; margin:2px 3px; }
+
+.suggestions { padding:14px 16px; border-top:1.5px solid #b76d2c; }
+.suggestions h4 { color:#6b3a17; margin-bottom:8px; font-size:14px; }
+.suggestions ul { margin-left:20px; font-size:13px; color:#444; line-height:1.8; }
+.suggestions li { margin-bottom:3px; }
+.suggestions li::marker { color:#b76d2c; }
+
+.analysis-actions { text-align:center; margin-top:8px; padding-bottom:4px; }
+.no-capture { /* 截图时隐藏 */ }
+</style>
+</head>
+<body>
+<h1 class="page-title">菲律宾少林文化中心 · 首课体能测试表 在线填写</h1>
+
+<div class="layout">
+  <!-- ===== 左侧：表单 ===== -->
+  <div class="form-panel">
+    <h2>填写信息</h2>
+
+    <fieldset>
+      <legend>基础信息</legend>
+      <div class="row-2">
+        <div class="field"><label>教练 Coach</label><input id="coach" type="text" placeholder="教练姓名"></div>
+        <div class="field"><label>日期 Date</label><input id="date" type="date"></div>
+      </div>
+      <div class="field"><label>时间 Time</label><input id="time" type="time"></div>
+    </fieldset>
+
+    <fieldset>
+      <legend>学员信息（必填 ⚠️ 用于分析）</legend>
+      <div class="field"><label>姓名 Name</label><input id="name" type="text" placeholder="学员姓名"></div>
+      <div class="row-3">
+        <div class="field"><label>年龄 Age *</label><input id="age" type="number" min="1" max="99" placeholder="如 10"></div>
+        <div class="field"><label>性别 Sex *</label><select id="sex"><option value="">请选择</option><option value="男">男 / Male</option><option value="女">女 / Female</option></select></div>
+        <div class="field"><label>身高 Height</label><input id="height" type="number" step="0.1" placeholder="cm"></div>
+      </div>
+      <div class="row-2">
+        <div class="field"><label>体重 Weight (kg)</label><input id="weight" type="number" step="0.1" placeholder="kg"></div>
+        <div class="field"><label>联系电话 Contact</label><input id="contact" type="tel" placeholder="手机号"></div>
+      </div>
+      <div class="field" style="margin-top:8px;"><label>紧急联系人 Emergency Contact</label><input id="emergencyContact" type="tel" placeholder="姓名 + 手机号"></div>
+    </fieldset>
+
+    <fieldset>
+      <legend>健康与背景</legend>
+      <div class="row-3">
+        <div class="field"><label>先天疾病 Congenital</label><select id="congDisease"><option value="">选择</option><option value="无">无</option><option value="有">有</option></select></div>
+        <div class="field"><label>手术史 Surgical</label><select id="surgery"><option value="">选择</option><option value="无">无</option><option value="有">有</option></select></div>
+        <div class="field"><label>运动基础 Exercise</label><select id="exerciseBg"><option value="">选择</option><option value="无">无</option><option value="有">有</option></select></div>
+      </div>
+      <div class="row-2">
+        <div class="field"><label>是否报课 Enroll</label><select id="enroll"><option value="">选择</option><option value="是">是</option><option value="否">否</option></select></div>
+        <div class="field"><label>选择课包 Course Package</label><input id="package" type="text" placeholder="如：体验课 / 12次卡"></div>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>体能综合测评（必填 ⚠️）</legend>
+      <div class="row-2">
+        <div class="field"><label>俯卧撑 push-up（个/分钟）</label><input id="pushup" type="number" min="0" placeholder="如 20"></div>
+        <div class="field"><label>仰卧起坐 sit-up（个/分钟）</label><input id="situp" type="number" min="0" placeholder="如 30"></div>
+      </div>
+      <div class="row-2">
+        <div class="field"><label>立定跳远 standing leap（米）</label><input id="leap" type="number" step="0.01" min="0" placeholder="如 1.5"></div>
+        <div class="field"><label>蹲起 bodyweight squat（个/分钟）</label><input id="squat" type="number" min="0" placeholder="如 35"></div>
+      </div>
+      <div class="row-2">
+        <div class="field"><label>冲刺 Sprint（秒/14米）</label><input id="sprint" type="number" step="0.01" min="0" placeholder="如 3.2"></div>
+        <div class="field"><label>平板支撑 plank（秒）</label><input id="plank" type="number" min="0" placeholder="如 60"></div>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>附加信息</legend>
+      <div class="field"><label>期望 Expectations</label><textarea id="expectation" placeholder="例：强身健体 / 学习拳法"></textarea></div>
+      <div class="field">
+        <label>第一印象 First Impression <span style="color:#999;font-weight:normal;">（点击下方词汇快速填写）</span></label>
+        <div class="word-bank" id="impressionWords"></div>
+        <textarea id="impression" placeholder="教练/师父评价"></textarea>
+      </div>
+    </fieldset>
+
+    <div class="actions">
+      <button class="btn btn-secondary" id="resetBtn">重 置</button>
+      <button class="btn btn-primary" id="generateBtn">生成测试表图片</button>
+    </div>
+    <div class="actions">
+      <button class="btn btn-accent" id="analysisBtn">生成体能分析报告</button>
+    </div>
+    <div id="analysisError" style="display:none; color:#c62828; font-size:12px; margin-top:6px; padding:6px 10px; background:#ffebee; border-radius:6px; border:1px solid #ef9a9a;"></div>
+  </div>
+
+  <!-- ===== 右侧：预览 ===== -->
+  <div class="preview-wrap">
+    <div class="preview-header">
+      <h2>实时预览</h2>
+      <span class="hint">左侧填写 → 右侧同步更新</span>
+    </div>
+
+    <!-- 测试表 -->
+    <div id="captureArea">
+      <div class="form-card" id="formCard">
+        <div class="logo-row">
+          <div class="logo-circle">禅</div>
+          <div class="form-title-cn">菲律宾宾少林文化中心首课体能测试表</div>
+          <div class="form-title-en">Philippine Shaolin Cultural Center Physical Fitness Test Form</div>
+        </div>
+        <div class="meta-row">
+          <div class="meta-cell"><span class="label">教练 Coach:</span><span class="value" id="pCoach">__________</span></div>
+          <div class="meta-cell"><span class="label">日期 Date:</span><span class="value" id="pDate">__________</span></div>
+          <div class="meta-cell"><span class="label">时间 Time:</span><span class="value" id="pTime">__________</span></div>
+        </div>
+        <table class="info-table">
+          <tr>
+            <td class="label-cell"><span class="cn">姓名</span><span class="en">Name</span></td>
+            <td colspan="2"><span id="pName" class="empty">　　　</span></td>
+            <td class="label-cell"><span class="cn">年龄</span><span class="en">Age</span></td>
+            <td><span id="pAge" class="empty">　　　</span></td>
+            <td class="label-cell"><span class="cn">性别</span><span class="en">Sex</span></td>
+            <td><span id="pSex" class="empty">　　　</span></td>
+          </tr>
+          <tr>
+            <td class="label-cell"><span class="cn">身高</span><span class="en">Height</span></td>
+            <td colspan="2"><span id="pHeight" class="empty">　　　</span></td>
+            <td class="label-cell"><span class="cn">是否有先<br>天疾病</span><span class="en">Congenital<br>disease</span></td>
+            <td><span id="pCongDisease" class="empty">　　　</span></td>
+            <td class="label-cell"><span class="cn">是否有手<br>术史</span><span class="en">Surgical<br>history</span></td>
+            <td><span id="pSurgery" class="empty">　　　</span></td>
+          </tr>
+          <tr>
+            <td class="label-cell"><span class="cn">体重</span><span class="en">Weight</span></td>
+            <td colspan="2"><span id="pWeight" class="empty">　　　</span></td><td colspan="2" style="text-align:center;color:#b0a99f;">是否有运动基础 Exercise background</td><td colspan="2"><span id="pExerciseBg" class="empty">　　　</span></td>
+          </tr>
+          <tr>
+            <td class="label-cell"><span class="cn">联系电话</span><span class="en">Contact</span></td>
+            <td colspan="2"><span id="pContact" class="empty">　　　</span></td>
+            <td class="label-cell" colspan="2"><span class="cn">是否报课</span><span class="en">Enroll</span></td>
+            <td colspan="2"><span id="pEnroll" class="empty">　　　</span></td>
+          </tr>
+          <tr>
+            <td class="label-cell" colspan="3"><span class="cn">紧急联系人</span><span class="en">Emergency Contact</span></td>
+            <td colspan="4"><span id="pEmergencyContact" class="empty">　　　</span></td>
+          </tr>
+          <tr>
+            <td class="label-cell" colspan="3"><span class="cn">选择课包</span><span class="en">Course Package</span></td>
+            <td colspan="4"><span id="pPackage" class="empty">　　　</span></td>
+          </tr>
+        </table>
+        <div class="section-title"><span class="cn">体能综合测评</span><span class="en">Comprehensive Physical Fitness Assessment</span></div>
+        <table class="test-table">
+          <tr><td class="label-cell" colspan="2" style="text-align:center;background:#fff;width:50%;">测试项目 Test</td><td colspan="2" style="text-align:center;">测试结果 Result</td></tr>
+          <tr><td class="name-cell" colspan="2"><span class="cn">俯卧撑</span><span class="en">push-up</span></td><td class="result-cell"><span id="pPushup" class="empty">　　　</span></td><td class="unit-cell">个 / 分钟 minute</td></tr>
+          <tr><td class="name-cell" colspan="2"><span class="cn">仰卧起坐</span><span class="en">sit-up</span></td><td class="result-cell"><span id="pSitup" class="empty">　　　</span></td><td class="unit-cell">个 / 分钟 minute</td></tr>
+          <tr><td class="name-cell" colspan="2"><span class="cn">立定跳远</span><span class="en">standing leap</span></td><td class="result-cell"><span id="pLeap" class="empty">　　　</span></td><td class="unit-cell">米 meter</td></tr>
+          <tr><td class="name-cell" colspan="2"><span class="cn">蹲起</span><span class="en">bodyweight squat</span></td><td class="result-cell"><span id="pSquat" class="empty">　　　</span></td><td class="unit-cell">个 / 分钟 minute</td></tr>
+          <tr><td class="name-cell" colspan="2"><span class="cn">冲刺</span><span class="en">Sprint</span></td><td class="result-cell"><span id="pSprint" class="empty">　　　</span></td><td class="unit-cell">" /14 meters</td></tr>
+          <tr><td class="name-cell" colspan="2"><span class="cn">平板支撑</span><span class="en">plank</span></td><td class="result-cell"><span id="pPlank" class="empty">　　　</span></td><td class="unit-cell">秒 second</td></tr>
+          <tr><td class="name-cell" colspan="2"><span class="cn">想通过少林功夫大学到什么？</span><span class="en">Expectations from Shaolin Kung Fu Training</span></td><td colspan="2"><span id="pExpectation" class="empty">　　　</span></td></tr>
+          <tr><td class="name-cell" colspan="2"><span class="cn">在师父眼里的第一印象</span><span class="en">First Impression in Master's Eyes</span></td><td colspan="2"><span id="pImpression" class="empty">　　　</span></td></tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- 体能分析报告（默认隐藏） -->
+    <div id="analysisCard" class="analysis-card" style="display:none;">
+      <div class="analysis-header">
+        <div class="ah-cn">菲律宾宾少林文化中心 · 体能分析报告</div>
+        <div class="ah-en">Physical Fitness Analysis Report · Shaolin Cultural Center</div>
+      </div>
+      <div class="analysis-meta">
+        <span>姓名: <b id="rName">-</b></span>
+        <span>年龄: <b id="rAge">-</b></span>
+        <span>性别: <b id="rSex">-</b></span>
+        <span>日期: <b id="rDate">-</b></span>
+      </div>
+      <div class="overall-banner" id="overallBanner">
+        <div class="ob-grade" id="obGrade">总体评级：--</div>
+        <div class="ob-score" id="obScore">综合得分：-- / 100</div>
+      </div>
+      <div class="analysis-body">
+        <div class="radar-wrap">
+          <canvas id="radarCanvas" width="280" height="280"></canvas>
+        </div>
+        <table class="result-table">
+          <thead><tr><th>测试项目</th><th>实测成绩</th><th>评级</th><th>得分</th></tr></thead>
+          <tbody id="resultTbody">
+            <tr><td>-</td><td>-</td><td>-</td><td>-</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <!-- 家长通俗版能力条 -->
+      <div class="parent-bars" id="parentBars">
+        <h4>📊 能力一目了然 <span style="font-size:11px;color:#999;font-weight:normal;">（家长友好版）</span></h4>
+        <div id="pbarContainer"></div>
+      </div>
+      <!-- 家长解读摘要 -->
+      <div class="parent-summary" id="parentSummary">
+        <h4>👨‍👩‍👧 家长解读</h4>
+        <div class="summary-text" id="summaryText"></div>
+      </div>
+      <div class="suggestions">
+        <h4>训练建议 Training Suggestions</h4>
+        <ul id="suggestionList"><li>请先填写体能数据并点击"生成体能分析报告"</li></ul>
+      </div>
+      <div class="analysis-actions no-capture">
+        <button class="btn btn-sm btn-accent" id="downloadReportBtn" style="display:none;">下载分析报告图片</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ============================================================
+//  1. 实时预览联动（测试表）
+// ============================================================
+const fields = [
+  ['coach','pCoach'],['date','pDate'],['time','pTime'],
+  ['name','pName'],['age','pAge'],['sex','pSex'],['height','pHeight'],
+  ['congDisease','pCongDisease'],['surgery','pSurgery'],
+  ['weight','pWeight'],['exerciseBg','pExerciseBg'],
+  ['contact','pContact'],['emergencyContact','pEmergencyContact'],['enroll','pEnroll'],['package','pPackage'],
+  ['pushup','pPushup'],['situp','pSitup'],['leap','pLeap'],
+  ['squat','pSquat'],['sprint','pSprint'],['plank','pPlank'],
+  ['expectation','pExpectation'],['impression','pImpression'],
+];
+
+fields.forEach(([id, pid]) => {
+  const el = document.getElementById(id);
+  const preview = document.getElementById(pid);
+  if (!el || !preview) return;
+  el.addEventListener('input', () => {
+    const v = el.value.trim();
+    if (v) { preview.textContent = v; preview.classList.remove('empty'); }
+    else { preview.innerHTML = '　　　'; preview.classList.add('empty'); }
+  });
+});
+
+// ============================================================
+//  1b. 第一印象词汇标签（点击即填）
+// ============================================================
+const impressionWords = [
+  { cn:'认真专注', en:'Focused' },
+  { cn:'活泼好动', en:'Energetic' },
+  { cn:'自信大方', en:'Confident' },
+  { cn:'文静内向', en:'Quiet & Reserved' },
+  { cn:'胆小谨慎', en:'Cautious' },
+  { cn:'好胜心强', en:'Competitive' },
+  { cn:'协调性好', en:'Well-coordinated' },
+  { cn:'柔韧性好', en:'Flexible' },
+  { cn:'反应敏捷', en:'Quick reflexes' },
+  { cn:'有毅力', en:'Persistent' },
+  { cn:'听话配合', en:'Cooperative' },
+  { cn:'领悟力高', en:'Quick learner' },
+  { cn:'模仿力强', en:'Good imitator' },
+  { cn:'勇敢无畏', en:'Brave & fearless' },
+  { cn:'纪律性强', en:'Disciplined' },
+  { cn:'情绪稳定', en:'Emotionally stable' },
+  { cn:'爱笑开朗', en:'Cheerful & outgoing' },
+  { cn:'好奇心强', en:'Curious' },
+  { cn:'节奏感好', en:'Good rhythm' },
+  { cn:'力量潜力大', en:'Strong potential' },
+  { cn:'耐力好', en:'Good endurance' },
+  { cn:'害羞怕生', en:'Shy with strangers' },
+  { cn:'容易分心', en:'Easily distracted' },
+  { cn:'急躁冲动', en:'Impatient / Impulsive' },
+  { cn:'身体僵硬', en:'Stiff body' },
+];
+
+const impTA = document.getElementById('impression');
+const impBank = document.getElementById('impressionWords');
+const activeWords = new Set();  // track which words are selected
+
+// 首次渲染标签
+impressionWords.forEach(w => {
+  const span = document.createElement('span');
+  span.className = 'tag';
+  span.textContent = `${w.cn} (${w.en})`;
+  span.dataset.word = w.cn;
+  span.addEventListener('click', () => {
+    span.classList.toggle('active');
+    if (span.classList.contains('active')) {
+      activeWords.add(w.cn);
+    } else {
+      activeWords.delete(w.cn);
+    }
+    // 重建 textarea 内容，按选中顺序排列
+    const ordered = impressionWords.filter(w => activeWords.has(w.cn)).map(w => w.cn);
+    impTA.value = ordered.join('、');
+    // 同步触发预览
+    impTA.dispatchEvent(new Event('input', { bubbles:true }));
+  });
+  impBank.appendChild(span);
+});
+
+// 监听手动修改 textarea，同步高亮标签
+impTA.addEventListener('input', () => {
+  const typed = impTA.value;
+  // 按顿号或逗号拆出已输入的词
+  const typedWords = new Set(typed.split(/[,，、]/).map(s => s.trim()).filter(Boolean));
+  // 同步标签高亮
+  activeWords.clear();
+  impBank.querySelectorAll('.tag').forEach(tag => {
+    const w = tag.dataset.word;
+    if (typedWords.has(w)) {
+      tag.classList.add('active');
+      activeWords.add(w);
+    } else {
+      tag.classList.remove('active');
+    }
+  });
+});
+
+// 重置时清空标签状态（hook 到 reset 逻辑之后）
+const origReset = document.getElementById('resetBtn').onclick;
+document.getElementById('resetBtn').addEventListener('click', () => {
+  setTimeout(() => {
+    activeWords.clear();
+    impBank.querySelectorAll('.tag').forEach(t => t.classList.remove('active'));
+  }, 50);
+});
+
+// 重置
+document.getElementById('resetBtn').addEventListener('click', () => {
+  if (!confirm('确认要清空所有已填写的内容吗？')) return;
+  fields.forEach(([id, pid]) => {
+    const el = document.getElementById(id);
+    const preview = document.getElementById(pid);
+    if (el) el.value = '';
+    if (preview) { preview.innerHTML = '　　　'; preview.classList.add('empty'); }
+  });
+  document.getElementById('analysisCard').style.display = 'none';
+});
+
+// 生成测试表图片
+document.getElementById('generateBtn').addEventListener('click', async () => {
+  const btn = document.getElementById('generateBtn');
+  const txt = btn.textContent;
+  btn.textContent = '正在生成...'; btn.disabled = true;
+  try {
+    const canvas = await html2canvas(document.getElementById('formCard'), {
+      scale: 2, backgroundColor: '#ffffff', useCORS: true, logging: false,
+    });
+    const name = document.getElementById('name').value.trim() || '学员';
+    const dt = document.getElementById('date').value || new Date().toISOString().slice(0,10);
+    const link = document.createElement('a');
+    link.download = `体能测试表_${name}_${dt}.png`;
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+    const w = window.open('');
+    w.document.write('<img src="'+canvas.toDataURL('image/png')+'" style="display:block;margin:auto;">');
+  } catch(e) { alert('生成失败：'+e.message); }
+  finally { btn.textContent = txt; btn.disabled = false; }
+});
+
+// ============================================================
+//  2. 体能评分标准（按年龄段 × 性别）
+//  每项标准数组：[优秀下限, 良好下限, 及格下限]
+//  冲刺为越低越好，其余为越高越好
+// ============================================================
+const standards = {
+  pushup: {
+    '6-8':  { '男':[15,10,5],  '女':[12,8,4] },
+    '9-11': { '男':[25,18,10], '女':[20,14,8] },
+    '12-14':{ '男':[35,25,15], '女':[28,20,12] },
+    '15-18':{ '男':[45,35,22], '女':[35,25,15] }
+  },
+  situp: {
+    '6-8':  { '男':[30,22,15], '女':[28,20,13] },
+    '9-11': { '男':[38,30,22], '女':[35,28,20] },
+    '12-14':{ '男':[45,38,28], '女':[42,35,25] },
+    '15-18':{ '男':[50,42,32], '女':[45,38,28] }
+  },
+  leap: {
+    '6-8':  { '男':[1.4,1.2,1.0], '女':[1.3,1.1,0.9] },
+    '9-11': { '男':[1.7,1.5,1.3], '女':[1.6,1.4,1.2] },
+    '12-14':{ '男':[2.0,1.8,1.5], '女':[1.8,1.6,1.4] },
+    '15-18':{ '男':[2.3,2.1,1.8], '女':[2.0,1.8,1.5] }
+  },
+  squat: {
+    '6-8':  { '男':[35,28,20], '女':[32,25,18] },
+    '9-11': { '男':[45,35,25], '女':[40,32,22] },
+    '12-14':{ '男':[55,45,32], '女':[48,38,28] },
+    '15-18':{ '男':[65,55,40], '女':[55,45,32] }
+  },
+  sprint: {
+    '6-8':  { '男':[3.5,4.0,4.5], '女':[3.8,4.3,4.8] },
+    '9-11': { '男':[3.0,3.4,3.8], '女':[3.3,3.7,4.1] },
+    '12-14':{ '男':[2.6,2.9,3.3], '女':[2.9,3.2,3.6] },
+    '15-18':{ '男':[2.3,2.6,2.9], '女':[2.6,2.9,3.2] }
+  },
+  plank: {
+    '6-8':  { '男':[60,40,25],  '女':[50,35,20] },
+    '9-11': { '男':[90,60,40],  '女':[75,55,35] },
+    '12-14':{ '男':[120,90,60], '女':[100,75,50] },
+    '15-18':{ '男':[150,120,80],'女':[120,95,65] }
+  }
+};
+
+function getAgeGroup(age) {
+  if (age <= 8) return '6-8';
+  if (age <= 11) return '9-11';
+  if (age <= 14) return '12-14';
+  return '15-18';
+}
+
+// 单项评分：返回 { grade, score(1-5), level(优秀/良好/及格/待提升) }
+function scoreItem(value, std, lowerBetter) {
+  if (value === '' || value === null || isNaN(value)) return null;
+  const v = parseFloat(value);
+  const [excellent, good, pass] = std;
+  if (lowerBetter) {
+    if (v <= excellent) return { grade:'优秀', score:5, level:'A' };
+    if (v <= good)      return { grade:'良好', score:4, level:'B' };
+    if (v <= pass)      return { grade:'及格', score:3, level:'C' };
+    return { grade:'待提升', score:2, level:'D' };
+  }
+  if (v >= excellent) return { grade:'优秀', score:5, level:'A' };
+  if (v >= good)      return { grade:'良好', score:4, level:'B' };
+  if (v >= pass)      return { grade:'及格', score:3, level:'C' };
+  return { grade:'待提升', score:2, level:'D' };
+}
+
+// ============================================================
+//  3. 雷达图绘制
+// ============================================================
+function drawRadar(canvas, scores) {
+  // scores: [{name, score(0-5), level}, ...]
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+  const cx = W/2, cy = H/2;
+  const R = Math.min(W,H)/2 - 38;
+  const N = scores.length;
+  ctx.clearRect(0,0,W,H);
+
+  // 5 层多边形网格
+  for (let i=1; i<=5; i++) {
+    ctx.beginPath();
+    const r = R * i / 5;
+    for (let j=0; j<N; j++) {
+      const a = -Math.PI/2 + j * 2*Math.PI/N;
+      const x = cx + r * Math.cos(a), y = cy + r * Math.sin(a);
+      j===0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
+    }
+    ctx.closePath();
+    ctx.strokeStyle = i===5 ? '#d0c4b3' : '#ede4d6';
+    ctx.lineWidth = 1; ctx.stroke();
+  }
+
+  // 轴线
+  for (let j=0; j<N; j++) {
+    const a = -Math.PI/2 + j * 2*Math.PI/N;
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.lineTo(cx+R*Math.cos(a), cy+R*Math.sin(a));
+    ctx.strokeStyle = '#d0c4b3'; ctx.lineWidth = 0.5; ctx.stroke();
+  }
+
+  // 数据多边形
+  ctx.beginPath();
+  for (let j=0; j<N; j++) {
+    const a = -Math.PI/2 + j * 2*Math.PI/N;
+    const r = R * (scores[j].score || 0) / 5;
+    const x = cx + r * Math.cos(a), y = cy + r * Math.sin(a);
+    j===0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
+  }
+  ctx.closePath();
+  ctx.fillStyle = 'rgba(183,109,44,0.25)'; ctx.fill();
+  ctx.strokeStyle = '#b76d2c'; ctx.lineWidth = 2; ctx.stroke();
+
+  // 数据点
+  for (let j=0; j<N; j++) {
+    const a = -Math.PI/2 + j * 2*Math.PI/N;
+    const r = R * (scores[j].score || 0) / 5;
+    ctx.beginPath();
+    ctx.arc(cx+r*Math.cos(a), cy+r*Math.sin(a), 4, 0, 2*Math.PI);
+    ctx.fillStyle = '#b76d2c'; ctx.fill();
+    ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.5; ctx.stroke();
+  }
+
+  // 标签（通俗名称 + 原项目名）
+  const labelMap = {
+    '俯卧撑':   '上肢力量',
+    '仰卧起坐': '腰腹核心',
+    '立定跳远': '腿部爆发',
+    '蹲起':     '下肢耐力',
+    '冲刺':     '速度敏捷',
+    '平板支撑': '核心稳定',
+  };
+  ctx.fillStyle = '#6b3a17'; ctx.font = 'bold 11px "Microsoft YaHei","PingFang SC",sans-serif';
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  for (let j=0; j<N; j++) {
+    const a = -Math.PI/2 + j * 2*Math.PI/N;
+    const lbl = labelMap[scores[j].name] || scores[j].name;
+    ctx.fillText(lbl, cx+(R+22)*Math.cos(a), cy+(R+22)*Math.sin(a));
+  }
+
+  // 中心文字
+  ctx.fillStyle = '#6b3a17'; ctx.font = '10px "Microsoft YaHei","PingFang SC",sans-serif';
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillText('六维体能', cx, cy-8);
+  ctx.fillText('越圆越均衡', cx, cy+10);
+}
+
+// ============================================================
+//  3b. 家长通俗版条形图 + 解读摘要
+// ============================================================
+const barLabelMap = {
+  '俯卧撑':   { cn:'上肢力量', what:'推撑·出拳的基础' },
+  '仰卧起坐': { cn:'腰腹核心', what:'踢腿·翻身的力量源' },
+  '立定跳远': { cn:'腿部爆发', what:'跳跃·腾空能力' },
+  '蹲起':     { cn:'下肢耐力', what:'马步·持续发力的底气' },
+  '冲刺':     { cn:'速度敏捷', what:'反应·躲闪·进退' },
+  '平板支撑': { cn:'核心稳定', what:'全身控制·姿势持久' },
+};
+const levelEmoji = { A:'⭐', B:'✅', C:'⚠️', D:'❌' };
+const levelLabel  = { A:'优秀', B:'良好', C:'需加强', D:'待提升' };
+
+function renderParentBars(results) {
+  const container = document.getElementById('pbarContainer');
+  const valid = results.filter(r => r && r.score !== undefined);
+  if (valid.length === 0) { container.innerHTML = '<p style="color:#999;font-size:13px;">暂无有效数据</p>'; return; }
+  container.innerHTML = valid.map(r => {
+    const pct = (r.score / 5 * 100);
+    const lbl = barLabelMap[r.name] || { cn:r.name, what:'' };
+    return `<div class="pbar-row">
+      <div class="pbar-label">
+        <span class="cn">${lbl.cn}</span>
+        <span class="what">${lbl.what}</span>
+      </div>
+      <div class="pbar-track">
+        <div class="pbar-fill level-${r.level}" style="width:${pct}%;"></div>
+      </div>
+      <div class="pbar-emoji">${levelEmoji[r.level]||'—'}</div>
+      <div class="pbar-score">${r.score}/5</div>
+    </div>`;
+  }).join('');
+}
+
+function renderParentSummary(results, pct, overallGrade) {
+  const valid = results.filter(r => r && r.score !== undefined);
+  const strengths = valid.filter(r => r.level === 'A' || r.level === 'B');
+  const weaknesses = valid.filter(r => r.level === 'C' || r.level === 'D');
+
+  let summaryHtml = '';
+
+  // 总体一句话
+  if (pct >= 90) {
+    summaryHtml += '<p>🎉 您的孩子<span class="highlight-good">体能非常出色</span>！各项能力均衡发展，具备很好的功夫训练基础，可以直接进入进阶课程。</p>';
+  } else if (pct >= 75) {
+    summaryHtml += '<p>👍 您的孩子<span class="highlight-good">体能基础良好</span>，整体素质不错，在个别项目上加强训练后会进步更快。</p>';
+  } else if (pct >= 60) {
+    summaryHtml += '<p>💪 您的孩子<span style="color:#ef6c00;font-weight:bold;">体能处于起步阶段</span>，这是正常的！少林功夫训练会帮助ta逐步提升各项能力。</p>';
+  } else {
+    summaryHtml += '<p>🌱 您的孩子<span class="highlight-weak">体能基础较薄弱</span>，不用担心——每个功夫大师都是从零开始的，坚持训练一定会有巨大进步！</p>';
+  }
+
+  // 优势项
+  if (strengths.length > 0) {
+    summaryHtml += '<p style="margin-top:10px;">✅ <b>优势项目：</b>';
+    strengths.forEach(r => {
+      const lbl = barLabelMap[r.name] || { cn:r.name };
+      summaryHtml += `<span class="tag-strength">${lbl.cn} ${levelEmoji[r.level]}</span>`;
+    });
+    summaryHtml += '</p>';
+  }
+
+  // 短板项
+  if (weaknesses.length > 0) {
+    summaryHtml += '<p style="margin-top:6px;">🎯 <b>重点加强：</b>';
+    weaknesses.forEach(r => {
+      const lbl = barLabelMap[r.name] || { cn:r.name };
+      summaryHtml += `<span class="tag-weakness">${lbl.cn} ${levelEmoji[r.level]}</span>`;
+    });
+    summaryHtml += ' <span style="font-size:12px;color:#999;">—— 这些是训练中需要多关注的方向</span></p>';
+  }
+
+  // 怎么看图
+  summaryHtml += '<p style="margin-top:10px;font-size:12px;color:#999;">💡 <b>怎么看：</b>上面六维图越圆越均衡，条形图越长能力越强。⭐优秀 ✅良好 ⚠️需加强 ❌待提升。</p>';
+
+  document.getElementById('summaryText').innerHTML = summaryHtml;
+}
+
+// ============================================================
+//  4. 生成体能分析报告
+// ============================================================
+const itemConfig = [
+  { key:'pushup', name:'俯卧撑',   field:'pushup', unit:'个/分钟', lowerBetter:false },
+  { key:'situp',  name:'仰卧起坐', field:'situp',  unit:'个/分钟', lowerBetter:false },
+  { key:'leap',   name:'立定跳远', field:'leap',   unit:'米',     lowerBetter:false },
+  { key:'squat',  name:'蹲起',     field:'squat',  unit:'个/分钟', lowerBetter:false },
+  { key:'sprint', name:'冲刺',     field:'sprint', unit:'秒/14m',  lowerBetter:true  },
+  { key:'plank',  name:'平板支撑', field:'plank',  unit:'秒',     lowerBetter:false },
+];
+
+// 训练建议库
+const suggestionMap = {
+  pushup: {
+    A:'俯卧撑表现优秀，上肢力量出色，继续保持训练节奏。',
+    B:'俯卧撑良好，可通过标准俯卧撑+跪姿俯卧撑交替训练继续提升。',
+    C:'俯卧撑有待加强，建议每日做 3 组跪姿俯卧撑，每组 8–15 个，逐步过渡到标准俯卧撑。',
+    D:'俯卧撑需重点加强，从靠墙俯卧撑开始，逐步增加难度，每周 3 次核心训练。'
+  },
+  situp: {
+    A:'仰卧起坐优秀，核心力量扎实，可增加卷腹变式（抬腿 / 转体）。',
+    B:'仰卧起坐良好，建议增加平板支撑 + 交替抬腿来强化核心耐力。',
+    C:'仰卧起坐需提升，每日 3 组仰卧起坐，每组 10–20 个，注意下巴不靠胸。',
+    D:'仰卧起坐是短板，从屈膝仰卧起坐练起，每次 3 组、每组 8 个，慢慢加量。'
+  },
+  leap: {
+    A:'立定跳远出色，下肢爆发力很强，可尝试跳箱、深蹲跳进一步提升。',
+    B:'立定跳远良好，加入蛙跳和单腿跳训练，改善起跳角度和摆臂节奏。',
+    C:'立定跳远需加强，建议多练深蹲和箭步蹲，增加腿部力量后再练跳远技术。',
+    D:'立定跳远是重点突破项，从原地纵跳和半蹲跳开始，每周 2–3 次专项训练。'
+  },
+  squat: {
+    A:'蹲起优秀，下肢耐力扎实，可加入负重蹲起或单腿蹲起增加挑战。',
+    B:'蹲起良好，保持正确姿势的前提下适当加快速度，稳定>数量。',
+    C:'蹲起需加强，每日做 3 组自重深蹲，注意膝盖不超脚尖、腰背挺直。',
+    D:'蹲起基础较弱，从靠墙静蹲和半蹲开始，每周 3 次，逐步增加幅度与次数。'
+  },
+  sprint: {
+    A:'短冲刺优秀，速度天赋突出，可加入变速跑和折返跑来提升比赛感。',
+    B:'冲刺良好，建议加强起跑反应和步伐频率训练，配核心稳定训练。',
+    C:'冲刺有提升空间，多练加速跑变向跑，冲刺前做好动态热身、避免拉伤。',
+    D:'冲刺基础需打牢，从 10m 加速跑和跳绳开始练反应和频率，每周 2–3 次。'
+  },
+  plank: {
+    A:'平板支撑出色，核心稳定性很强，可尝试单腿/单臂平板支撑进阶。',
+    B:'平板支撑良好，增加侧平板和动态平板（开合腿）来丰富核心训练。',
+    C:'平板支撑需加强，从 3×30 秒开始，每周延长 10 秒，保持身体呈一条直线。',
+    D:'平板支撑是主要短板，从 3×15 秒开始，优先保证姿势，不拱腰不塌腰。'
+  }
+};
+
+function getResultText(v, unit) {
+  return v ? v + ' ' + unit : '-';
+}
+
+function showError(msg) {
+  const errEl = document.getElementById('analysisError');
+  errEl.textContent = msg;
+  errEl.style.display = 'block';
+  setTimeout(() => { errEl.style.display = 'none'; }, 4000);
+}
+
+document.getElementById('analysisBtn').addEventListener('click', () => {
+  console.log('=== 体能分析按钮被点击 ===');
+  const btn = document.getElementById('analysisBtn');
+  btn.textContent = '分析中...';
+  btn.disabled = true;
+
+  try { runAnalysis(); }
+  catch(e) { console.error(e); showError('分析出错：'+e.message); }
+  finally { btn.textContent = '生成体能分析报告'; btn.disabled = false; }
+});
+
+function runAnalysis() {
+  const name = document.getElementById('name').value.trim() || '-';
+  const ageStr = document.getElementById('age').value.trim();
+  const sex = document.getElementById('sex').value;
+  const dateStr = document.getElementById('date').value || new Date().toISOString().slice(0,10);
+
+  console.log('年龄:', ageStr, '性别:', sex);
+
+  if (!ageStr || !sex) {
+    showError('⚠️ 请先填写「年龄」和「性别」，这是体能分析的必要条件。');
+    return;
+  }
+  const age = parseInt(ageStr);
+  if (age < 3 || age > 60) { showError('⚠️ 年龄请在 3–60 岁之间'); return; }
+  const ag = getAgeGroup(age);
+  const sexKey = sex === '男' ? '男' : '女';
+
+  console.log('年龄段:', ag, '性别key:', sexKey);
+
+  // 逐项评分（注意 scoreItem 可能返回 null，不能用 ...null 展开）
+  const results = itemConfig.map(it => {
+    const val = document.getElementById(it.field).value.trim();
+    const std = standards[it.key][ag][sexKey];
+    const s = scoreItem(val, std, it.lowerBetter);
+    // 避免展开 null 导致 TypeError
+    return s ? { name:it.name, value:val, unit:it.unit, ...s }
+             : { name:it.name, value:val, unit:it.unit, score:undefined, grade:'-', level:'-' };
+  });
+
+  const valid = results.filter(r => r !== null && r.score !== undefined);
+  console.log('有效评分项数:', valid.length, valid);
+
+  if (valid.length === 0) {
+    showError('⚠️ 请至少填写一项体能测试数据才能生成分析报告。');
+    return;
+  }
+
+  const totalScore = valid.reduce((sum,r) => sum + r.score, 0);
+  const avgScore = totalScore / valid.length;
+  const pct = Math.round(avgScore / 5 * 100);
+
+  let overallGrade, bannerClass;
+  if (pct >= 90) { overallGrade='优秀'; bannerClass='grade-A'; }
+  else if (pct >= 75) { overallGrade='良好'; bannerClass='grade-B'; }
+  else if (pct >= 60) { overallGrade='及格'; bannerClass='grade-C'; }
+  else { overallGrade='待提升'; bannerClass='grade-D'; }
+
+  // 渲染报告
+  document.getElementById('rName').textContent = name;
+  document.getElementById('rAge').textContent = age;
+  document.getElementById('rSex').textContent = sex;
+  document.getElementById('rDate').textContent = dateStr;
+  document.getElementById('obGrade').textContent = '总体评级：'+overallGrade;
+  document.getElementById('obScore').textContent = '综合得分：'+pct+' / 100（基于'+valid.length+'项测试）';
+
+  const banner = document.getElementById('overallBanner');
+  banner.className = 'overall-banner ' + bannerClass;
+
+  // 明细表
+  const tbody = document.getElementById('resultTbody');
+  tbody.innerHTML = results.map(r => {
+    if (!r || r.score === undefined) {
+      return '<tr><td class="td-name">'+(r ? r.name : '-')+'</td><td>未填写</td><td>-</td><td>-</td></tr>';
+    }
+    return '<tr>'
+      + '<td class="td-name">'+r.name+'</td>'
+      + '<td>'+getResultText(r.value, r.unit)+'</td>'
+      + '<td class="grade-'+r.level+'-color">'+r.grade+'</td>'
+      + '<td>'+r.score+'/5</td>'
+      + '</tr>';
+  }).join('');
+
+  // 训练建议
+  const suggestionList = document.getElementById('suggestionList');
+  let hasWeakness = false;
+  const suggestions = results.map(r => {
+    if (!r || r.score === undefined) return null;
+    if (r.level === 'C' || r.level === 'D') hasWeakness = true;
+    return suggestionMap[r.name] ? '<li><b>['+r.name+']</b> '+suggestionMap[r.name][r.level]+'</li>' : null;
+  }).filter(Boolean);
+
+  if (!hasWeakness) {
+    suggestions.unshift('<li><b>所有项目表现优秀/良好，继续保持全面发展！</b></li>');
+  }
+  // 加一句总体建议
+  if (pct >= 90) suggestions.unshift('<li><b>整体体能水平优异</b>，各维度均衡发展，可进入进阶少林功夫训练课程。</li>');
+  else if (pct >= 75) suggestions.unshift('<li><b>整体体能良好</b>，有进一步提升空间，建议针对性加强弱项后挑战更高难度。</li>');
+  else if (pct >= 60) suggestions.unshift('<li><b>整体体能尚可</b>，部分项目需要重点提升，建议每周保持 3–4 次规律训练。</li>');
+  else suggestions.unshift('<li><b>整体体能基础需夯实</b>，建议从低强度开始，逐步增加训练量与强度，打好根基。</li>');
+
+  suggestionList.innerHTML = suggestions.join('');
+
+  // 显示报告
+  document.getElementById('analysisCard').style.display = 'block';
+  document.getElementById('downloadReportBtn').style.display = 'inline-block';
+
+  // 绘制雷达图
+  const radarScores = valid.map(r => ({ name:r.name, score:r.score, level:r.level }));
+  setTimeout(() => drawRadar(document.getElementById('radarCanvas'), radarScores), 100);
+
+  // 渲染家长友好版条形图 + 解读摘要
+  renderParentBars(results);
+  renderParentSummary(results, pct, overallGrade);
+
+  // 滚动到报告位置
+  document.getElementById('analysisCard').scrollIntoView({ behavior:'smooth', block:'start' });
+}
+
+// ============================================================
+//  5. 下载分析报告图片
+// ============================================================
+document.getElementById('downloadReportBtn').addEventListener('click', async () => {
+  const card = document.getElementById('analysisCard');
+  const btn = document.getElementById('downloadReportBtn');
+  const noCaptureEls = card.querySelectorAll('.no-capture');
+  noCaptureEls.forEach(el => el.style.display = 'none');
+
+  try {
+    // 确保雷达图已绘制
+    const canvas = await html2canvas(card, {
+      scale: 2, backgroundColor: '#ffffff', useCORS: true, logging: false,
+    });
+    const name = document.getElementById('name').value.trim() || '学员';
+    const dt = document.getElementById('date').value || new Date().toISOString().slice(0,10);
+    const link = document.createElement('a');
+    link.download = `体能分析报告_${name}_${dt}.png`;
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+    const w = window.open('');
+    w.document.write('<img src="'+canvas.toDataURL('image/png')+'" style="display:block;margin:auto;">');
+  } catch(e) { alert('生成失败：'+e.message); }
+  finally { noCaptureEls.forEach(el => el.style.display = ''); }
+});
+</script>
+</body>
+</html>
