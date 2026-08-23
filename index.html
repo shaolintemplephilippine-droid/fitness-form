@@ -81,10 +81,11 @@ body {
 }
 .logo-row { text-align:center; padding:18px 12px 10px; border-bottom:1.5px solid #b76d2c; background:#fff; }
 .logo-circle {
-  width:76px; height:76px; margin:0 auto 8px; border-radius:50%;
-  background:#fff; border:2px solid #6b3a17;
+  width:96px; height:96px; margin:0 auto 8px;
   display:flex; align-items:center; justify-content:center;
-  font-size:36px; color:#6b3a17;
+}
+.logo-circle img {
+  width:100%; height:100%; object-fit:contain;
 }
 .form-title-cn { font-size:18px; font-weight:bold; letter-spacing:2px; color:#1a1a1a; }
 .form-title-en { font-size:13px; letter-spacing:1px; color:#1a1a1a; margin-top:4px; }
@@ -272,8 +273,8 @@ body {
     <div id="captureArea">
       <div class="form-card" id="formCard">
         <div class="logo-row">
-          <div class="logo-circle">禅</div>
-          <div class="form-title-cn">菲律宾宾少林文化中心首课体能测试表</div>
+          <div class="logo-circle"><img src="logo.png" alt="菲律宾少林文化中心"></div>
+          <div class="form-title-cn">菲律宾少林文化中心首课体能测试表</div>
           <div class="form-title-en">Philippine Shaolin Cultural Center Physical Fitness Test Form</div>
         </div>
         <div class="meta-row">
@@ -335,7 +336,7 @@ body {
     <!-- 体能分析报告（默认隐藏） -->
     <div id="analysisCard" class="analysis-card" style="display:none;">
       <div class="analysis-header">
-        <div class="ah-cn">菲律宾宾少林文化中心 · 体能分析报告</div>
+        <div class="ah-cn">菲律宾少林文化中心 · 体能分析报告</div>
         <div class="ah-en">Physical Fitness Analysis Report · Shaolin Cultural Center</div>
       </div>
       <div class="analysis-meta">
