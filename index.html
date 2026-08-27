@@ -1031,6 +1031,7 @@ function sbPost(table, payload) {
     headers: {
       "Content-Type": "application/json",
       "apikey": SB_KEY,
+      "Authorization": "Bearer " + SB_KEY,
       "Prefer": "return=minimal"
     },
     body: JSON.stringify(payload)
