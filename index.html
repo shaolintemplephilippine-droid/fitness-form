@@ -179,9 +179,29 @@ body {
 
 .analysis-actions { text-align:center; margin-top:8px; padding-bottom:4px; }
 .no-capture { /* 截图时隐藏 */ }
+
+/* ===== 顶部导航（体验课学员管理入口）===== */
+.top-nav-bar {
+  background:linear-gradient(135deg,#6b3a17 0%,#9a5a2a 100%);
+  padding:0 20px; display:flex; align-items:center; flex-wrap:wrap;
+  box-shadow:0 2px 8px rgba(0,0,0,.2); margin-bottom:0;
+}
+.top-nav-bar .nav-brand { color:#fff; font-size:15px; font-weight:bold; padding:12px 16px 12px 0; border-right:1px solid rgba(255,255,255,.2); margin-right:8px; white-space:nowrap; }
+.top-nav-bar .nav-brand span { font-size:11px; opacity:.7; display:block; }
+.top-nav-bar .nav-tabs { display:flex; gap:4px; padding:6px 0; flex-wrap:wrap; }
+.top-nav-bar .nav-tab { color:rgba(255,255,255,.75); text-decoration:none; padding:7px 14px; border-radius:6px; font-size:13px; white-space:nowrap; transition:all .2s; }
+.top-nav-bar .nav-tab:hover { background:rgba(255,255,255,.15); color:#fff; }
+.top-nav-bar .nav-tab.active { background:rgba(255,255,255,.22); color:#fff; font-weight:bold; }
 </style>
 </head>
 <body>
+<nav class="top-nav-bar">
+  <div class="nav-brand">菲律宾少林文化中心<span>Philippine Shaolin Cultural Center</span></div>
+  <div class="nav-tabs">
+    <a href="index.html" class="nav-tab active">📋 首课体能测试</a>
+    <a href="trial-mgmt.html" class="nav-tab">👥 体验课学员管理</a>
+  </div>
+</nav>
 <h1 class="page-title">菲律宾少林文化中心 · 首课体能测试表 在线填写</h1>
 
 <div class="layout">
@@ -259,6 +279,11 @@ body {
     <div class="actions">
       <button class="btn btn-accent" id="analysisBtn">生成体能分析报告</button>
     </div>
+
+    <div class="actions" style="margin-top:4px;">
+      <button class="btn btn-secondary" id="saveToMgmtBtn" style="background:#f0e8d8;color:#6b3a17;border:1.5px solid #c4a882;">📥 保存记录到学员管理</button>
+    </div>
+    <div id="saveMsg" style="display:none; font-size:12px; color:#2e7d32; margin-top:4px; padding:5px 10px; background:#f0fdf4; border-radius:6px; border:1px solid #86efac;"></div>
     <div id="analysisError" style="display:none; color:#c62828; font-size:12px; margin-top:6px; padding:6px 10px; background:#ffebee; border-radius:6px; border:1px solid #ef9a9a;"></div>
   </div>
 
@@ -958,6 +983,59 @@ document.getElementById('downloadReportBtn').addEventListener('click', async () 
     w.document.write('<img src="'+canvas.toDataURL('image/png')+'" style="display:block;margin:auto;">');
   } catch(e) { alert('生成失败：'+e.message); }
   finally { noCaptureEls.forEach(el => el.style.display = ''); }
+});
+
+// ============================================================
+//  保存体测记录到“体验课学员管理”
+//  localStorage key: shaolin_trial_students
+// ============================================================
+document.getElementById("saveToMgmtBtn").addEventListener("click", function() {
+  var name    = document.getElementById("name").value.trim();
+  var dateVal = document.getElementById("date").value;
+  if (!name)    { alert("请先填写学员姓名再保存。"); return; }
+  if (!dateVal) { alert("请先填写体验课日期再保存。"); return; }
+  var existing = [];
+  try { existing = JSON.parse(localStorage.getItem("shaolin_trial_students") || "[]"); } catch(e) {}
+  var dup = existing.find(function(s){ return s.name === name && s.trialDate === dateVal; });
+  if (dup) {
+    var msgEl = document.getElementById("saveMsg");
+    msgEl.textContent = "⚠️ 该学员（" + name + " / " + dateVal + "）已存在于管理记录中，跳过重复保存。";
+    msgEl.style.display = "block";
+    setTimeout(function(){ msgEl.style.display="none"; }, 4000);
+    return;
+  }
+  var enrollVal  = document.getElementById("enroll").value;
+  var convStatus = enrollVal === "是" ? "enrolled" : "follow";
+  var rec = {
+    id: "r" + Date.now() + Math.random().toString(36).slice(2,7),
+    name: name,
+    age:  document.getElementById("age").value,
+    sex:  document.getElementById("sex").value,
+    contact: document.getElementById("contact").value.trim(),
+    trialDate: dateVal,
+    coach: document.getElementById("coach").value.trim(),
+    enroll: enrollVal,
+    coursePackage: document.getElementById("package").value.trim(),
+    convStatus: convStatus,
+    remark: document.getElementById("expectation").value.trim(),
+    followUps: [], nextFollowDate: "",
+    fitnessData: {
+      pushup: document.getElementById("pushup").value,
+      situp:  document.getElementById("situp").value,
+      leap:   document.getElementById("leap").value,
+      squat:  document.getElementById("squat").value,
+      sprint: document.getElementById("sprint").value,
+      plank:  document.getElementById("plank").value
+    },
+    createdAt: new Date().toISOString(),
+    source: "fitness-form"
+  };
+  existing.unshift(rec);
+  localStorage.setItem("shaolin_trial_students", JSON.stringify(existing));
+  var msgEl = document.getElementById("saveMsg");
+  msgEl.textContent = "✅ 已保存！" + name + "（" + dateVal + "）→ 已进入学员管理，状态：" + (convStatus==="enrolled"?"已报名":"待跟进");
+  msgEl.style.display = "block";
+  setTimeout(function(){ msgEl.style.display="none"; }, 6000);
 });
 </script>
 </body>
