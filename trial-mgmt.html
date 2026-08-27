@@ -1148,8 +1148,7 @@ document.getElementById('exportBtn').addEventListener('click', function() {
       s.coursePackage||'',STATUS_LABEL[s.convStatus]||'',
       (s.followUps&&s.followUps.length)||0,fmtDate(s.nextFollowDate),s.remark||'']
       .map(function(v){ return '"'+String(v).replace(/"/g,'""')+'"'; }).join(',');
-  }).join('
-');
+  }).join('\n');
   var blob = new Blob([BOM+header+rows],{type:'text/csv;charset=utf-8;'});
   var a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
