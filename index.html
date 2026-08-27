@@ -192,6 +192,10 @@ body {
 .top-nav-bar .nav-tab { color:rgba(255,255,255,.75); text-decoration:none; padding:7px 14px; border-radius:6px; font-size:13px; white-space:nowrap; transition:all .2s; }
 .top-nav-bar .nav-tab:hover { background:rgba(255,255,255,.15); color:#fff; }
 .top-nav-bar .nav-tab.active { background:rgba(255,255,255,.22); color:#fff; font-weight:bold; }
+/* ===== 健康背景详情扩展 ===== */
+.detail-expand { margin-top:6px; padding:8px 12px; background:#fffbf5; border-left:3px solid #c4a882; border-radius:0 6px 6px 0; animation:fadeIn .2s ease; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(-4px)} to{opacity:1;transform:none} }
+.req { color:#c62828; font-size:10px; }
 </style>
 </head>
 <body>
@@ -240,9 +244,18 @@ body {
         <div class="field"><label>手术史 Surgical</label><select id="surgery"><option value="">选择</option><option value="无">无</option><option value="有">有</option></select></div>
         <div class="field"><label>运动基础 Exercise</label><select id="exerciseBg"><option value="">选择</option><option value="无">无</option><option value="有">有</option></select></div>
       </div>
-      <div class="row-2">
-        <div class="field"><label>是否报课 Enroll</label><select id="enroll"><option value="">选择</option><option value="是">是</option><option value="否">否</option></select></div>
-        <div class="field"><label>选择课包 Course Package</label><input id="package" type="text" placeholder="如：体验课 / 12次卡"></div>
+
+      <div id="congDiseaseDetail" style="display:none;" class="detail-expand">
+        <div class="field"><label>先天疾病详情 <span class="req">*</span></label><input id="congDiseaseText" type="text" placeholder="请说明具体疾病名称 / Please specify condition"></div>
+      </div>
+      <div id="surgeryDetail" style="display:none;" class="detail-expand">
+        <div class="row-2">
+          <div class="field"><label>手术类型 Surgery Type <span class="req">*</span></label><input id="surgeryType" type="text" placeholder="请说明手术类型 / e.g. knee surgery"></div>
+          <div class="field"><label>手术时间 Surgery Date <span class="req">*</span></label><input id="surgeryDate" type="month"></div>
+        </div>
+      </div>
+      <div id="exerciseBgDetail" style="display:none;" class="detail-expand">
+        <div class="field"><label>运动基础详情 <span class="req">*</span></label><input id="exerciseBgText" type="text" placeholder="请说明运动项目及年限 / e.g. 篮球 3年"></div>
       </div>
     </fieldset>
 
@@ -272,6 +285,10 @@ body {
       </div>
     </fieldset>
 
+    <div class="actions" style="margin-top:4px;">
+      <button class="btn btn-secondary" id="saveToMgmtBtn" style="background:#f0e8d8;color:#6b3a17;border:1.5px solid #c4a882;">📥 保存记录到学员管理</button>
+    </div>
+    <div id="saveMsg" style="display:none; font-size:12px; color:#2e7d32; margin-top:4px; padding:5px 10px; background:#f0fdf4; border-radius:6px; border:1px solid #86efac;"></div>
     <div class="actions">
       <button class="btn btn-secondary" id="resetBtn">重 置</button>
       <button class="btn btn-primary" id="generateBtn">生成测试表图片</button>
@@ -279,11 +296,6 @@ body {
     <div class="actions">
       <button class="btn btn-accent" id="analysisBtn">生成体能分析报告</button>
     </div>
-
-    <div class="actions" style="margin-top:4px;">
-      <button class="btn btn-secondary" id="saveToMgmtBtn" style="background:#f0e8d8;color:#6b3a17;border:1.5px solid #c4a882;">📥 保存记录到学员管理</button>
-    </div>
-    <div id="saveMsg" style="display:none; font-size:12px; color:#2e7d32; margin-top:4px; padding:5px 10px; background:#f0fdf4; border-radius:6px; border:1px solid #86efac;"></div>
     <div id="analysisError" style="display:none; color:#c62828; font-size:12px; margin-top:6px; padding:6px 10px; background:#ffebee; border-radius:6px; border:1px solid #ef9a9a;"></div>
   </div>
 
@@ -415,7 +427,7 @@ const fields = [
   ['name','pName'],['age','pAge'],['sex','pSex'],['height','pHeight'],
   ['congDisease','pCongDisease'],['surgery','pSurgery'],
   ['weight','pWeight'],['exerciseBg','pExerciseBg'],
-  ['contact','pContact'],['emergencyContact','pEmergencyContact'],['enroll','pEnroll'],['package','pPackage'],
+  ['contact','pContact'],['emergencyContact','pEmergencyContact'],
   ['pushup','pPushup'],['situp','pSitup'],['leap','pLeap'],
   ['squat','pSquat'],['sprint','pSprint'],['plank','pPlank'],
   ['expectation','pExpectation'],['impression','pImpression'],
@@ -986,26 +998,71 @@ document.getElementById('downloadReportBtn').addEventListener('click', async () 
 });
 
 // ============================================================
-//  保存体测记录到“体验课学员管理”
-//  localStorage key: shaolin_trial_students
+//  健康背景详情字段显示/隐藏
 // ============================================================
+(function() {
+  function toggleDetail(selectId, detailId) {
+    var sel = document.getElementById(selectId);
+    var box = document.getElementById(detailId);
+    if (!sel || !box) return;
+    sel.addEventListener("change", function() {
+      box.style.display = sel.value === "有" ? "block" : "none";
+      if (sel.value !== "有") {
+        box.querySelectorAll("input").forEach(function(i){ i.value = ""; });
+      }
+    });
+  }
+  toggleDetail("congDisease",  "congDiseaseDetail");
+  toggleDetail("surgery",      "surgeryDetail");
+  toggleDetail("exerciseBg",   "exerciseBgDetail");
+})();
+
+// ============================================================
+//  保存体测记录到“体验课学员管理”
+//  localStorage key : shaolin_trial_students  (本地备份)
+//  Supabase REST    : trial_students 表 (多设备同步)
+// ============================================================
+var SB_URL = "https://kyhngugadpjgbsrxukyl.supabase.co";
+var SB_KEY = "sb_publishable_4ztjX4VW_e5hqHZCLvInow_z_GwAd9j";
+
+function sbPost(table, payload) {
+  return fetch(SB_URL + "/rest/v1/" + table, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "apikey": SB_KEY,
+      "Prefer": "return=minimal"
+    },
+    body: JSON.stringify(payload)
+  });
+}
+
 document.getElementById("saveToMgmtBtn").addEventListener("click", function() {
   var name    = document.getElementById("name").value.trim();
   var dateVal = document.getElementById("date").value;
   if (!name)    { alert("请先填写学员姓名再保存。"); return; }
   if (!dateVal) { alert("请先填写体验课日期再保存。"); return; }
+
+  var congDisVal    = document.getElementById("congDisease").value;
+  var congDisDetail = congDisVal === "有" ? (document.getElementById("congDiseaseText").value.trim()) : "";
+  var surgeryVal    = document.getElementById("surgery").value;
+  var surgeryType   = surgeryVal === "有" ? (document.getElementById("surgeryType").value.trim()) : "";
+  var surgeryDate   = surgeryVal === "有" ? (document.getElementById("surgeryDate").value) : "";
+  var exBgVal       = document.getElementById("exerciseBg").value;
+  var exBgDetail    = exBgVal === "有" ? (document.getElementById("exerciseBgText").value.trim()) : "";
+
   var existing = [];
   try { existing = JSON.parse(localStorage.getItem("shaolin_trial_students") || "[]"); } catch(e) {}
   var dup = existing.find(function(s){ return s.name === name && s.trialDate === dateVal; });
   if (dup) {
     var msgEl = document.getElementById("saveMsg");
+    msgEl.style.color = "#b45309";
     msgEl.textContent = "⚠️ 该学员（" + name + " / " + dateVal + "）已存在于管理记录中，跳过重复保存。";
     msgEl.style.display = "block";
     setTimeout(function(){ msgEl.style.display="none"; }, 4000);
     return;
   }
-  var enrollVal  = document.getElementById("enroll").value;
-  var convStatus = enrollVal === "是" ? "enrolled" : "follow";
+
   var rec = {
     id: "r" + Date.now() + Math.random().toString(36).slice(2,7),
     name: name,
@@ -1014,11 +1071,16 @@ document.getElementById("saveToMgmtBtn").addEventListener("click", function() {
     contact: document.getElementById("contact").value.trim(),
     trialDate: dateVal,
     coach: document.getElementById("coach").value.trim(),
-    enroll: enrollVal,
-    coursePackage: document.getElementById("package").value.trim(),
-    convStatus: convStatus,
+    enroll: "",
+    coursePackage: "",
+    convStatus: "follow",
     remark: document.getElementById("expectation").value.trim(),
     followUps: [], nextFollowDate: "",
+    health: {
+      congDisease: congDisVal, congDiseaseDetail: congDisDetail,
+      surgery: surgeryVal, surgeryType: surgeryType, surgeryDate: surgeryDate,
+      exerciseBg: exBgVal, exerciseBgDetail: exBgDetail
+    },
     fitnessData: {
       pushup: document.getElementById("pushup").value,
       situp:  document.getElementById("situp").value,
@@ -1030,13 +1092,37 @@ document.getElementById("saveToMgmtBtn").addEventListener("click", function() {
     createdAt: new Date().toISOString(),
     source: "fitness-form"
   };
+
   existing.unshift(rec);
   localStorage.setItem("shaolin_trial_students", JSON.stringify(existing));
+
+  sbPost("trial_students", {
+    id: rec.id,
+    name: rec.name,
+    age: rec.age ? parseInt(rec.age) : null,
+    sex: rec.sex,
+    contact: rec.contact,
+    trial_date: rec.trialDate,
+    coach: rec.coach,
+    conv_status: rec.convStatus,
+    remark: rec.remark,
+    health: rec.health,
+    fitness_data: rec.fitnessData,
+    follow_ups: [],
+    created_at: rec.createdAt,
+    source: rec.source
+  }).then(function(r) {
+    if (!r.ok) r.text().then(function(t){ console.warn("Supabase sync warn:", t); });
+  }).catch(function(e){ console.warn("Supabase offline, local only:", e.message); });
+
   var msgEl = document.getElementById("saveMsg");
-  msgEl.textContent = "✅ 已保存！" + name + "（" + dateVal + "）→ 已进入学员管理，状态：" + (convStatus==="enrolled"?"已报名":"待跟进");
+  msgEl.style.color = "#2e7d32";
+  msgEl.textContent = "✅ 已保存！" + name + "（" + dateVal + "）→ 已进入学员管理，转化状态：待跟进";
   msgEl.style.display = "block";
   setTimeout(function(){ msgEl.style.display="none"; }, 6000);
 });
 </script>
+
 </body>
+
 </html>

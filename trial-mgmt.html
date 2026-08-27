@@ -5,124 +5,133 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>菲律宾少林文化中心 · 体验课学员管理</title>
 <style>
-* { box-sizing:border-box; margin:0; padding:0; }
-body { font-family:"Microsoft YaHei","PingFang SC",Arial,sans-serif; background:#f5f1ec; color:#222; }
-.top-nav { background:linear-gradient(135deg,#6b3a17 0%,#9a5a2a 100%); padding:0 20px; display:flex; align-items:center; flex-wrap:wrap; box-shadow:0 2px 8px rgba(0,0,0,.2); }
-.nav-brand { color:#fff; font-size:15px; font-weight:bold; padding:14px 16px 14px 0; white-space:nowrap; border-right:1px solid rgba(255,255,255,.2); margin-right:8px; }
-.nav-brand span { font-size:11px; opacity:.7; display:block; }
-.nav-tabs { display:flex; flex-wrap:wrap; gap:2px; padding:6px 0; }
-.nav-tab { color:rgba(255,255,255,.75); text-decoration:none; padding:7px 14px; border-radius:6px; font-size:13px; white-space:nowrap; transition:all .2s; }
-.nav-tab:hover { background:rgba(255,255,255,.15); color:#fff; }
-.nav-tab.active { background:rgba(255,255,255,.22); color:#fff; font-weight:bold; }
-.nav-right { margin-left:auto; padding:6px 0; }
-.main { max-width:1280px; margin:0 auto; padding:20px 16px; }
-#lockScreen { position:fixed; inset:0; background:linear-gradient(135deg,#6b3a17,#9a5a2a); display:flex; align-items:center; justify-content:center; z-index:9999; }
-.lock-box { background:#fff; border-radius:16px; padding:40px 36px; text-align:center; max-width:360px; width:90%; box-shadow:0 8px 32px rgba(0,0,0,.3); }
-.lock-box img { width:72px; height:72px; margin:0 auto 16px; display:block; }
-.lock-box h2 { color:#6b3a17; margin-bottom:6px; font-size:18px; }
-.lock-box p { color:#888; font-size:13px; margin-bottom:20px; }
-.lock-input { width:100%; padding:10px 14px; border:2px solid #e0d7cb; border-radius:8px; font-size:15px; text-align:center; letter-spacing:4px; margin-bottom:12px; font-family:inherit; }
-.lock-input:focus { outline:none; border-color:#6b3a17; }
-.lock-btn { width:100%; padding:11px; background:#6b3a17; color:#fff; border:none; border-radius:8px; font-size:15px; font-weight:bold; cursor:pointer; font-family:inherit; }
-.lock-btn:hover { background:#8b4d22; }
-.lock-err { color:#c62828; font-size:13px; margin-top:8px; display:none; }
-.stats-strip { display:grid; grid-template-columns:repeat(7,1fr); gap:10px; margin-bottom:20px; }
-@media(max-width:1100px){ .stats-strip { grid-template-columns:repeat(4,1fr); } }
-@media(max-width:640px){ .stats-strip { grid-template-columns:repeat(2,1fr); } }
-.stat-card { background:#fff; border-radius:10px; padding:14px 12px; text-align:center; box-shadow:0 2px 8px rgba(0,0,0,.07); border-top:3px solid #b76d2c; }
-.stat-card.blue { border-top-color:#1565c0; } .stat-card.green { border-top-color:#2e7d32; }
-.stat-card.red { border-top-color:#c62828; } .stat-card.purple { border-top-color:#6a1b9a; } .stat-card.orange { border-top-color:#ef6c00; }
-.stat-card .val { font-size:26px; font-weight:bold; color:#6b3a17; }
-.stat-card.blue .val { color:#1565c0; } .stat-card.green .val { color:#2e7d32; }
-.stat-card.red .val { color:#c62828; } .stat-card.purple .val { color:#6a1b9a; } .stat-card.orange .val { color:#ef6c00; }
-.stat-card .lbl { font-size:12px; color:#888; margin-top:4px; }
-.reminder-box { background:#fff3e0; border:1.5px solid #f59e0b; border-radius:10px; padding:14px 16px; margin-bottom:20px; }
-.reminder-box h3 { color:#b45309; margin-bottom:10px; font-size:14px; }
-.remind-row { display:flex; align-items:center; gap:8px; padding:7px 10px; margin-bottom:6px; background:#fff; border-radius:8px; border-left:4px solid #f59e0b; cursor:pointer; transition:background .15s; }
-.remind-row:hover { background:#fef3c7; }
-.remind-row .rname { font-weight:bold; font-size:13px; min-width:60px; }
-.rtag { font-size:11px; padding:2px 8px; border-radius:10px; font-weight:bold; white-space:nowrap; }
-.rtag-overdue { background:#fecaca; color:#c62828; } .rtag-today { background:#fed7aa; color:#c2410c; }
-.rtag-3d { background:#fef3c7; color:#b45309; } .rtag-7d { background:#e0f2fe; color:#0369a1; } .rtag-14d { background:#f0fdf4; color:#15803d; }
-.remind-empty { color:#999; font-size:13px; text-align:center; padding:10px; }
-.toolbar { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px; align-items:center; }
-.toolbar input, .toolbar select { padding:7px 10px; border:1.5px solid #d4c5b3; border-radius:6px; font-size:13px; background:#faf7f2; font-family:inherit; height:36px; }
-.toolbar input:focus, .toolbar select:focus { outline:none; border-color:#6b3a17; }
-.search-inp { min-width:160px; }
-.btn { padding:8px 16px; border:none; border-radius:6px; cursor:pointer; font-size:13px; font-weight:bold; font-family:inherit; transition:all .18s; height:36px; white-space:nowrap; }
-.btn-primary { background:#6b3a17; color:#fff; } .btn-primary:hover { background:#8b4d22; }
-.btn-accent { background:#2e7d32; color:#fff; } .btn-accent:hover { background:#388e3c; }
-.btn-secondary { background:#e0d7cb; color:#6b3a17; } .btn-secondary:hover { background:#d0c4b3; }
-.btn-blue { background:#1565c0; color:#fff; } .btn-blue:hover { background:#1976d2; }
-.btn-danger { background:#c62828; color:#fff; } .btn-danger:hover { background:#b71c1c; }
-.btn-sm { padding:4px 10px; font-size:12px; height:28px; }
-.table-wrap { overflow-x:auto; -webkit-overflow-scrolling:touch; background:#fff; border-radius:10px; box-shadow:0 2px 8px rgba(0,0,0,.07); }
-table.data-tbl { width:100%; border-collapse:collapse; min-width:900px; font-size:13px; }
-table.data-tbl thead th { background:#6b3a17; color:#fff; padding:9px 10px; text-align:left; white-space:nowrap; }
-table.data-tbl tbody tr { border-bottom:1px solid #f0e8d8; transition:background .15s; }
-table.data-tbl tbody tr:hover { background:#fdf9f2; }
-table.data-tbl td { padding:8px 10px; vertical-align:middle; }
-.badge { display:inline-block; padding:2px 9px; border-radius:12px; font-size:11px; font-weight:bold; white-space:nowrap; }
-.badge-enrolled { background:#dcfce7; color:#15803d; } .badge-not { background:#fecaca; color:#c62828; }
-.badge-follow { background:#fed7aa; color:#c2410c; } .badge-consider { background:#fef3c7; color:#b45309; }
-.badge-nointent { background:#f3e8ff; color:#6a1b9a; } .badge-unknown { background:#f1f5f9; color:#64748b; }
-.pagination { display:flex; gap:4px; justify-content:center; margin-top:12px; flex-wrap:wrap; }
-.pg-btn { padding:5px 10px; border:1px solid #d4c5b3; border-radius:5px; background:#fff; cursor:pointer; font-size:13px; }
-.pg-btn:hover { background:#f0e8d8; } .pg-btn.active { background:#6b3a17; color:#fff; border-color:#6b3a17; }
-.modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:1000; display:none; align-items:flex-start; justify-content:center; padding:40px 12px; overflow-y:auto; }
-.modal-overlay.open { display:flex; }
-.modal { background:#fff; border-radius:14px; padding:24px; max-width:640px; width:100%; box-shadow:0 8px 32px rgba(0,0,0,.2); }
-.modal h3 { color:#6b3a17; margin-bottom:16px; font-size:16px; border-bottom:2px solid #e3c79e; padding-bottom:8px; }
-.modal-close { float:right; background:none; border:none; font-size:20px; cursor:pointer; color:#888; margin-top:-4px; }
-.form-row { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px; }
-.form-row-3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; margin-bottom:10px; }
-.form-row-1 { margin-bottom:10px; }
-.f-label { font-size:12px; color:#6b3a17; margin-bottom:3px; display:block; }
-.f-inp { width:100%; padding:7px 10px; border:1.5px solid #d4c5b3; border-radius:6px; font-size:13px; background:#faf7f2; font-family:inherit; }
-.f-inp:focus { outline:none; border-color:#6b3a17; background:#fff; }
-.modal-actions { display:flex; gap:8px; justify-content:flex-end; margin-top:16px; flex-wrap:wrap; }
-.info-grid { display:grid; grid-template-columns:1fr 1fr; gap:6px 16px; margin-bottom:14px; font-size:13px; }
-.ig-lbl { color:#888; font-size:12px; } .ig-val { font-weight:bold; color:#333; }
-.follow-list { max-height:240px; overflow-y:auto; margin-bottom:14px; }
-.follow-item { background:#faf7f2; border:1px solid #e0d7cb; border-radius:8px; padding:10px 12px; margin-bottom:8px; position:relative; }
-.fi-date { font-size:12px; color:#888; }
-.fi-method { display:inline-block; background:#dbeafe; color:#1d4ed8; border-radius:10px; padding:1px 8px; font-size:11px; font-weight:bold; margin:4px 4px 4px 0; }
-.fi-result { font-size:13px; color:#333; margin-top:4px; }
-.fi-next { font-size:12px; color:#ef6c00; margin-top:4px; }
-.fi-del { position:absolute; top:8px; right:8px; background:none; border:none; cursor:pointer; color:#ccc; font-size:14px; }
-.fi-del:hover { color:#c62828; }
-.section-sep { border:none; border-top:1.5px solid #e3c79e; margin:14px 0; }
-.panel { background:#fff; border-radius:10px; padding:20px; box-shadow:0 2px 8px rgba(0,0,0,.07); margin-bottom:20px; }
-.panel h3 { color:#6b3a17; margin-bottom:14px; font-size:15px; border-bottom:2px solid #e3c79e; padding-bottom:8px; }
-.month-stats-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-bottom:14px; }
-@media(max-width:640px){ .month-stats-grid { grid-template-columns:repeat(2,1fr); } }
-.ms-card { background:#faf7f2; border-radius:8px; padding:12px; text-align:center; }
-.ms-card .mv { font-size:22px; font-weight:bold; color:#6b3a17; }
-.ms-card .ml { font-size:12px; color:#888; margin-top:3px; }
-.ms-card.green .mv { color:#2e7d32; } .ms-card.red .mv { color:#c62828; } .ms-card.blue .mv { color:#1565c0; } .ms-card.orange .mv { color:#ef6c00; }
-.coach-tbl { width:100%; border-collapse:collapse; font-size:13px; }
-.coach-tbl th { background:#f0e8d8; color:#6b3a17; padding:8px 10px; text-align:left; }
-.coach-tbl td { border-bottom:1px solid #f0e8d8; padding:8px 10px; cursor:pointer; }
-.coach-tbl tr:hover td { background:#fdf9f2; }
-.rate-bar { height:18px; background:#f0e8d8; border-radius:9px; overflow:hidden; }
-.rate-fill { height:100%; background:linear-gradient(90deg,#2e7d32,#4caf50); border-radius:9px; }
-.chart-row { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:14px; }
-@media(max-width:700px){ .chart-row { grid-template-columns:1fr; } }
-.chart-box { background:#faf7f2; border-radius:8px; padding:12px; }
-.chart-box h4 { color:#6b3a17; font-size:13px; margin-bottom:8px; }
-.page-tabs { display:flex; gap:4px; margin-bottom:16px; flex-wrap:wrap; }
-.page-tab { padding:8px 18px; background:#e0d7cb; color:#6b3a17; border:none; border-radius:6px; cursor:pointer; font-size:13px; font-weight:bold; font-family:inherit; transition:all .2s; }
-.page-tab.active { background:#6b3a17; color:#fff; }
-@media(max-width:640px){ .main{padding:12px 10px;} .modal{padding:16px;} .form-row,.form-row-3{grid-template-columns:1fr;} .info-grid{grid-template-columns:1fr;} }
-.toast-msg { position:fixed; bottom:24px; left:50%; transform:translateX(-50%); background:#333; color:#fff; padding:10px 20px; border-radius:24px; font-size:14px; z-index:9998; display:none; pointer-events:none; white-space:nowrap; }
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:"Microsoft YaHei","PingFang SC",Arial,sans-serif;background:#f5f1ec;color:#222;}
+.top-nav{background:linear-gradient(135deg,#6b3a17 0%,#9a5a2a 100%);padding:0 20px;display:flex;align-items:center;flex-wrap:wrap;box-shadow:0 2px 8px rgba(0,0,0,.2);}
+.nav-brand{color:#fff;font-size:15px;font-weight:bold;padding:14px 16px 14px 0;white-space:nowrap;border-right:1px solid rgba(255,255,255,.2);margin-right:8px;}
+.nav-brand span{font-size:11px;opacity:.7;display:block;}
+.nav-tabs{display:flex;flex-wrap:wrap;gap:2px;padding:6px 0;}
+.nav-tab{color:rgba(255,255,255,.75);text-decoration:none;padding:7px 14px;border-radius:6px;font-size:13px;white-space:nowrap;transition:all .2s;}
+.nav-tab:hover{background:rgba(255,255,255,.15);color:#fff;}
+.nav-tab.active{background:rgba(255,255,255,.22);color:#fff;font-weight:bold;}
+.nav-right{margin-left:auto;padding:6px 0;}
+.main{max-width:1280px;margin:0 auto;padding:20px 16px;}
+#lockScreen{position:fixed;inset:0;background:linear-gradient(135deg,#6b3a17,#9a5a2a);display:flex;align-items:center;justify-content:center;z-index:9999;}
+.lock-box{background:#fff;border-radius:16px;padding:40px 36px;text-align:center;max-width:360px;width:90%;box-shadow:0 8px 32px rgba(0,0,0,.3);}
+.lock-box h2{color:#6b3a17;margin-bottom:6px;font-size:18px;}
+.lock-box p{color:#888;font-size:13px;margin-bottom:20px;}
+.lock-input{width:100%;padding:10px 14px;border:2px solid #e0d7cb;border-radius:8px;font-size:15px;text-align:center;letter-spacing:4px;margin-bottom:12px;font-family:inherit;}
+.lock-input:focus{outline:none;border-color:#6b3a17;}
+.lock-btn{width:100%;padding:11px;background:#6b3a17;color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:bold;cursor:pointer;font-family:inherit;}
+.lock-btn:hover{background:#8b4d22;}
+.lock-err{color:#c62828;font-size:13px;margin-top:8px;display:none;}
+.sync-bar{background:#e8f5e9;border-bottom:1px solid #a5d6a7;padding:6px 20px;font-size:12px;color:#2e7d32;display:flex;align-items:center;gap:10px;}
+.sync-bar.error{background:#fff3e0;border-color:#ffcc80;color:#e65100;}
+.sync-bar.loading{background:#e3f2fd;border-color:#90caf9;color:#1565c0;}
+.spin{display:inline-block;animation:spin .8s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.stats-strip{display:grid;grid-template-columns:repeat(7,1fr);gap:10px;margin-bottom:20px;}
+@media(max-width:1100px){.stats-strip{grid-template-columns:repeat(4,1fr);}}
+@media(max-width:640px){.stats-strip{grid-template-columns:repeat(2,1fr);}}
+.stat-card{background:#fff;border-radius:10px;padding:14px 12px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.07);border-top:3px solid #b76d2c;}
+.stat-card.blue{border-top-color:#1565c0;}.stat-card.green{border-top-color:#2e7d32;}
+.stat-card.red{border-top-color:#c62828;}.stat-card.purple{border-top-color:#6a1b9a;}.stat-card.orange{border-top-color:#ef6c00;}
+.stat-card .val{font-size:26px;font-weight:bold;color:#6b3a17;}
+.stat-card.blue .val{color:#1565c0;}.stat-card.green .val{color:#2e7d32;}
+.stat-card.red .val{color:#c62828;}.stat-card.purple .val{color:#6a1b9a;}.stat-card.orange .val{color:#ef6c00;}
+.stat-card .lbl{font-size:12px;color:#888;margin-top:4px;}
+.reminder-box{background:#fff3e0;border:1.5px solid #f59e0b;border-radius:10px;padding:14px 16px;margin-bottom:20px;}
+.reminder-box h3{color:#b45309;margin-bottom:10px;font-size:14px;}
+.remind-row{display:flex;align-items:center;gap:8px;padding:7px 10px;margin-bottom:6px;background:#fff;border-radius:8px;border-left:4px solid #f59e0b;cursor:pointer;transition:background .15s;}
+.remind-row:hover{background:#fef3c7;}
+.remind-row .rname{font-weight:bold;font-size:13px;min-width:60px;}
+.rtag{font-size:11px;padding:2px 8px;border-radius:10px;font-weight:bold;white-space:nowrap;}
+.rtag-overdue{background:#fecaca;color:#c62828;}.rtag-today{background:#fed7aa;color:#c2410c;}
+.rtag-3d{background:#fef3c7;color:#b45309;}.rtag-7d{background:#e0f2fe;color:#0369a1;}.rtag-14d{background:#f0fdf4;color:#15803d;}
+.remind-empty{color:#999;font-size:13px;text-align:center;padding:10px;}
+.toolbar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;align-items:center;}
+.toolbar input,.toolbar select{padding:7px 10px;border:1.5px solid #d4c5b3;border-radius:6px;font-size:13px;background:#faf7f2;font-family:inherit;height:36px;}
+.toolbar input:focus,.toolbar select:focus{outline:none;border-color:#6b3a17;}
+.search-inp{min-width:160px;}
+.btn{padding:8px 16px;border:none;border-radius:6px;cursor:pointer;font-size:13px;font-weight:bold;font-family:inherit;transition:all .18s;height:36px;white-space:nowrap;}
+.btn-primary{background:#6b3a17;color:#fff;}.btn-primary:hover{background:#8b4d22;}
+.btn-accent{background:#2e7d32;color:#fff;}.btn-accent:hover{background:#388e3c;}
+.btn-secondary{background:#e0d7cb;color:#6b3a17;}.btn-secondary:hover{background:#d0c4b3;}
+.btn-blue{background:#1565c0;color:#fff;}.btn-blue:hover{background:#1976d2;}
+.btn-danger{background:#c62828;color:#fff;}.btn-danger:hover{background:#b71c1c;}
+.btn-sm{padding:4px 10px;font-size:12px;height:28px;}
+.table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;background:#fff;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,.07);}
+table.data-tbl{width:100%;border-collapse:collapse;min-width:900px;font-size:13px;}
+table.data-tbl thead th{background:#6b3a17;color:#fff;padding:9px 10px;text-align:left;white-space:nowrap;}
+table.data-tbl tbody tr{border-bottom:1px solid #f0e8d8;transition:background .15s;}
+table.data-tbl tbody tr:hover{background:#fdf9f2;}
+table.data-tbl td{padding:8px 10px;vertical-align:middle;}
+.badge{display:inline-block;padding:2px 9px;border-radius:12px;font-size:11px;font-weight:bold;white-space:nowrap;}
+.badge-enrolled{background:#dcfce7;color:#15803d;}.badge-not{background:#fecaca;color:#c62828;}
+.badge-follow{background:#fed7aa;color:#c2410c;}.badge-consider{background:#fef3c7;color:#b45309;}
+.badge-nointent{background:#f3e8ff;color:#6a1b9a;}.badge-unknown{background:#f1f5f9;color:#64748b;}
+.pagination{display:flex;gap:4px;justify-content:center;margin-top:12px;flex-wrap:wrap;}
+.pg-btn{padding:5px 10px;border:1px solid #d4c5b3;border-radius:5px;background:#fff;cursor:pointer;font-size:13px;}
+.pg-btn:hover{background:#f0e8d8;}.pg-btn.active{background:#6b3a17;color:#fff;border-color:#6b3a17;}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:1000;display:none;align-items:flex-start;justify-content:center;padding:40px 12px;overflow-y:auto;}
+.modal-overlay.open{display:flex;}
+.modal{background:#fff;border-radius:14px;padding:24px;max-width:640px;width:100%;box-shadow:0 8px 32px rgba(0,0,0,.2);}
+.modal h3{color:#6b3a17;margin-bottom:16px;font-size:16px;border-bottom:2px solid #e3c79e;padding-bottom:8px;}
+.modal-close{float:right;background:none;border:none;font-size:20px;cursor:pointer;color:#888;margin-top:-4px;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;}
+.form-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:10px;}
+.form-row-1{margin-bottom:10px;}
+.f-label{font-size:12px;color:#6b3a17;margin-bottom:3px;display:block;}
+.f-inp{width:100%;padding:7px 10px;border:1.5px solid #d4c5b3;border-radius:6px;font-size:13px;background:#faf7f2;font-family:inherit;}
+.f-inp:focus{outline:none;border-color:#6b3a17;background:#fff;}
+.modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:16px;flex-wrap:wrap;}
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px 16px;margin-bottom:14px;font-size:13px;}
+.ig-lbl{color:#888;font-size:12px;}.ig-val{font-weight:bold;color:#333;}
+.health-box{background:#fff8f0;border:1px solid #e3c79e;border-radius:8px;padding:10px 12px;margin-bottom:12px;font-size:12px;}
+.health-box h4{color:#b45309;font-size:12px;margin-bottom:6px;}
+.health-row{display:flex;gap:16px;flex-wrap:wrap;}
+.health-item{min-width:140px;}
+.health-item .hl{color:#999;font-size:11px;}
+.health-item .hv{font-weight:bold;color:#333;}
+.follow-list{max-height:240px;overflow-y:auto;margin-bottom:14px;}
+.follow-item{background:#faf7f2;border:1px solid #e0d7cb;border-radius:8px;padding:10px 12px;margin-bottom:8px;position:relative;}
+.fi-date{font-size:12px;color:#888;}
+.fi-method{display:inline-block;background:#dbeafe;color:#1d4ed8;border-radius:10px;padding:1px 8px;font-size:11px;font-weight:bold;margin:4px 4px 4px 0;}
+.fi-result{font-size:13px;color:#333;margin-top:4px;}
+.fi-next{font-size:12px;color:#ef6c00;margin-top:4px;}
+.fi-del{position:absolute;top:8px;right:8px;background:none;border:none;cursor:pointer;color:#ccc;font-size:14px;}
+.fi-del:hover{color:#c62828;}
+.section-sep{border:none;border-top:1.5px solid #e3c79e;margin:14px 0;}
+.panel{background:#fff;border-radius:10px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,.07);margin-bottom:20px;}
+.panel h3{color:#6b3a17;margin-bottom:14px;font-size:15px;border-bottom:2px solid #e3c79e;padding-bottom:8px;}
+.month-stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px;}
+@media(max-width:640px){.month-stats-grid{grid-template-columns:repeat(2,1fr);}}
+.ms-card{background:#faf7f2;border-radius:8px;padding:12px;text-align:center;}
+.ms-card .mv{font-size:22px;font-weight:bold;color:#6b3a17;}
+.ms-card .ml{font-size:12px;color:#888;margin-top:3px;}
+.ms-card.green .mv{color:#2e7d32;}.ms-card.red .mv{color:#c62828;}.ms-card.blue .mv{color:#1565c0;}.ms-card.orange .mv{color:#ef6c00;}
+.coach-tbl{width:100%;border-collapse:collapse;font-size:13px;}
+.coach-tbl th{background:#f0e8d8;color:#6b3a17;padding:8px 10px;text-align:left;}
+.coach-tbl td{border-bottom:1px solid #f0e8d8;padding:8px 10px;cursor:pointer;}
+.coach-tbl tr:hover td{background:#fdf9f2;}
+.rate-bar{height:18px;background:#f0e8d8;border-radius:9px;overflow:hidden;}
+.rate-fill{height:100%;background:linear-gradient(90deg,#2e7d32,#4caf50);border-radius:9px;}
+.chart-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:14px;}
+@media(max-width:700px){.chart-row{grid-template-columns:1fr;}}
+.chart-box{background:#faf7f2;border-radius:8px;padding:12px;}
+.chart-box h4{color:#6b3a17;font-size:13px;margin-bottom:8px;}
+.page-tabs{display:flex;gap:4px;margin-bottom:16px;flex-wrap:wrap;}
+.page-tab{padding:8px 18px;background:#e0d7cb;color:#6b3a17;border:none;border-radius:6px;cursor:pointer;font-size:13px;font-weight:bold;font-family:inherit;transition:all .2s;}
+.page-tab.active{background:#6b3a17;color:#fff;}
+@media(max-width:640px){.main{padding:12px 10px;}.modal{padding:16px;}.form-row,.form-row-3{grid-template-columns:1fr;}.info-grid{grid-template-columns:1fr;}}
+.toast-msg{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#333;color:#fff;padding:10px 20px;border-radius:24px;font-size:14px;z-index:9998;display:none;pointer-events:none;white-space:nowrap;}
 </style>
 </head>
 <body>
 
 <div id="lockScreen">
   <div class="lock-box">
-    <img src="logo.png" alt="少林">
-    <h2>管理后台</h2>
+    <h2>🏯 管理后台</h2>
     <p>请输入管理密码以访问学员数据</p>
     <input id="pwdInput" class="lock-input" type="password" placeholder="密码" maxlength="20">
     <button class="lock-btn" id="lockBtn">进入管理系统</button>
@@ -138,10 +147,15 @@ table.data-tbl td { padding:8px 10px; vertical-align:middle; }
     <a href="trial-mgmt.html" class="nav-tab active">👥 体验课学员管理</a>
   </div>
   <div class="nav-right">
+    <button class="btn btn-secondary btn-sm" id="refreshBtn" style="margin-right:6px;">🔄 刷新数据</button>
     <button class="btn btn-secondary btn-sm" id="changePwdBtn" style="margin-right:6px;">🔑 修改密码</button>
     <button class="btn btn-secondary btn-sm" id="logoutBtn">退出登录</button>
   </div>
 </nav>
+
+<div id="syncBar" class="sync-bar loading" style="display:none;">
+  <span class="spin">⟳</span> <span id="syncMsg">正在从云端加载数据…</span>
+</div>
 
 <div class="main" id="mainContent" style="display:none;">
 
@@ -152,6 +166,7 @@ table.data-tbl td { padding:8px 10px; vertical-align:middle; }
     <button class="page-tab" data-tab="tab-coach">🥋 师父统计</button>
   </div>
 
+  <!-- ── Tab: 学员名单 ── -->
   <div id="tab-list">
     <div class="stats-strip" id="statsStrip"></div>
     <div class="toolbar">
@@ -182,9 +197,8 @@ table.data-tbl td { padding:8px 10px; vertical-align:middle; }
       <table class="data-tbl">
         <thead><tr>
           <th>#</th><th>姓名</th><th>年龄</th><th>性别</th>
-          <th>体验课日期</th><th>代课师父</th><th>是否报课</th>
-          <th>课程套餐</th><th>转化状态</th><th>跟进次数</th>
-          <th>下次跟进</th><th>操作</th>
+          <th>体验课日期</th><th>代课师父</th><th>课程套餐</th>
+          <th>转化状态</th><th>跟进次数</th><th>下次跟进</th><th>操作</th>
         </tr></thead>
         <tbody id="studentTbody"></tbody>
       </table>
@@ -192,6 +206,7 @@ table.data-tbl td { padding:8px 10px; vertical-align:middle; }
     <div class="pagination" id="pagination"></div>
   </div>
 
+  <!-- ── Tab: 今日待跟进 ── -->
   <div id="tab-remind" style="display:none;">
     <div class="reminder-box">
       <h3>🔔 今日待跟进 / 跟进提醒</h3>
@@ -199,6 +214,7 @@ table.data-tbl td { padding:8px 10px; vertical-align:middle; }
     </div>
   </div>
 
+  <!-- ── Tab: 月度统计 ── -->
   <div id="tab-monthly" style="display:none;">
     <div class="panel">
       <h3>📅 月度转化统计</h3>
@@ -216,11 +232,11 @@ table.data-tbl td { padding:8px 10px; vertical-align:middle; }
     </div>
   </div>
 
+  <!-- ── Tab: 师父统计 ── -->
   <div id="tab-coach" style="display:none;">
     <div class="panel">
       <h3>🥋 师父 / 教练转化统计</h3>
       <div class="toolbar" style="margin-bottom:14px;">
-        <select id="coachFilter2"><option value="">全部师父（汇总）</option></select>
         <select id="coachMonthFilter"><option value="">全部月份</option></select>
       </div>
       <div class="table-wrap" style="margin-bottom:16px;">
@@ -234,7 +250,7 @@ table.data-tbl td { padding:8px 10px; vertical-align:middle; }
         <h4 id="coachDetailTitle" style="color:#6b3a17;margin-bottom:10px;font-size:14px;"></h4>
         <div class="table-wrap">
           <table class="data-tbl">
-            <thead><tr><th>#</th><th>姓名</th><th>年龄</th><th>性别</th><th>体验课日期</th><th>是否报课</th><th>转化状态</th><th>跟进</th><th>操作</th></tr></thead>
+            <thead><tr><th>#</th><th>姓名</th><th>年龄</th><th>性别</th><th>体验课日期</th><th>转化状态</th><th>跟进</th><th>操作</th></tr></thead>
             <tbody id="coachDetailTbody"></tbody>
           </table>
         </div>
@@ -247,12 +263,16 @@ table.data-tbl td { padding:8px 10px; vertical-align:middle; }
 
 <div class="toast-msg" id="toastMsg"></div>
 
-<!-- 学员详情弹窗 -->
+<!-- ── 学员详情弹窗 ── -->
 <div class="modal-overlay" id="detailModal">
   <div class="modal">
     <button class="modal-close" id="detailClose">&times;</button>
     <h3 id="detailTitle">学员详情</h3>
     <div class="info-grid" id="detailInfo"></div>
+    <div id="detailHealthBox" class="health-box" style="display:none;">
+      <h4>🏥 健康与背景</h4>
+      <div class="health-row" id="detailHealthRows"></div>
+    </div>
     <hr class="section-sep">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
       <b style="font-size:14px;color:#6b3a17;">跟进记录</b>
@@ -279,7 +299,7 @@ table.data-tbl td { padding:8px 10px; vertical-align:middle; }
   </div>
 </div>
 
-<!-- 跟进弹窗 -->
+<!-- ── 跟进弹窗 ── -->
 <div class="modal-overlay" id="followModal">
   <div class="modal" style="max-width:480px;">
     <button class="modal-close" id="followClose">&times;</button>
@@ -305,7 +325,7 @@ table.data-tbl td { padding:8px 10px; vertical-align:middle; }
   </div>
 </div>
 
-<!-- 手动添加弹窗 -->
+<!-- ── 手动添加弹窗 ── -->
 <div class="modal-overlay" id="addModal">
   <div class="modal">
     <button class="modal-close" id="addClose">&times;</button>
@@ -324,15 +344,14 @@ table.data-tbl td { padding:8px 10px; vertical-align:middle; }
       <div><label class="f-label">课程套餐</label><input type="text" id="addPackage" class="f-inp" placeholder="如：体验课 / 12次卡"></div>
     </div>
     <div class="form-row">
-      <div><label class="f-label">是否报课</label><select id="addEnroll" class="f-inp"><option value="">选择</option><option value="是">是</option><option value="否">否</option></select></div>
       <div><label class="f-label">转化状态</label>
         <select id="addStatus" class="f-inp">
           <option value="follow">待跟进</option><option value="enrolled">已报名（已转化）</option>
           <option value="consider">暂时考虑</option><option value="nointent">无意向</option><option value="not">未报名</option>
         </select>
       </div>
+      <div><label class="f-label">备注</label><input type="text" id="addRemark" class="f-inp"></div>
     </div>
-    <div class="form-row-1"><label class="f-label">备注</label><textarea id="addRemark" class="f-inp" rows="2"></textarea></div>
     <div class="modal-actions">
       <button class="btn btn-secondary" id="addCancelBtn">取消</button>
       <button class="btn btn-primary" id="saveAddBtn">保存</button>
@@ -340,7 +359,7 @@ table.data-tbl td { padding:8px 10px; vertical-align:middle; }
   </div>
 </div>
 
-<!-- 修改密码弹窗 -->
+<!-- ── 修改密码弹窗 ── -->
 <div class="modal-overlay" id="pwdModal">
   <div class="modal" style="max-width:380px;">
     <button class="modal-close" id="pwdClose">&times;</button>
@@ -357,555 +376,810 @@ table.data-tbl td { padding:8px 10px; vertical-align:middle; }
 
 <script>
 // ============================================================
-//  Constants & storage helpers
+//  Constants
 // ============================================================
-var STORAGE_KEY = 'shaolin_trial_students';
-var PWD_KEY     = 'shaolin_mgmt_pwd';
-var SESSION_KEY = 'shaolin_mgmt_auth';
-var DEFAULT_PWD = 'shaolin2026';
+var STORAGE_KEY  = 'shaolin_trial_students';
+var PWD_KEY      = 'shaolin_mgmt_pwd';
+var SESSION_KEY  = 'shaolin_mgmt_auth';
+var DEFAULT_PWD  = 'shaolin2026';
+var SB_URL       = 'https://kyhngugadpjgbsrxukyl.supabase.co';
+var SB_KEY       = 'sb_publishable_4ztjX4VW_e5hqHZCLvInow_z_GwAd9j';
+var PAGE_SIZE    = 20;
 
 var STATUS_LABEL = {enrolled:'已报名',follow:'待跟进',consider:'暂时考虑',nointent:'无意向',not:'未报名','':'待跟进'};
 var STATUS_BADGE = {enrolled:'badge-enrolled',follow:'badge-follow',consider:'badge-consider',nointent:'badge-nointent',not:'badge-not','':'badge-unknown'};
 
+// ── Supabase REST helpers ──
+function sbHeaders() {
+  return {'Content-Type':'application/json','apikey':SB_KEY,'Prefer':'return=representation'};
+}
+function sbGet(path) {
+  return fetch(SB_URL+'/rest/v1/'+path, {headers:{'Content-Type':'application/json','apikey':SB_KEY}});
+}
+function sbPost(path, body) {
+  return fetch(SB_URL+'/rest/v1/'+path, {method:'POST', headers:sbHeaders(), body:JSON.stringify(body)});
+}
+function sbPatch(path, body) {
+  return fetch(SB_URL+'/rest/v1/'+path, {method:'PATCH', headers:Object.assign({},sbHeaders(),{'Prefer':'return=minimal'}), body:JSON.stringify(body)});
+}
+function sbDelete(path) {
+  return fetch(SB_URL+'/rest/v1/'+path, {method:'DELETE', headers:{'apikey':SB_KEY}});
+}
+
+// ── local storage helpers ──
+function loadLocal() { try{ return JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]'); }catch(e){ return []; } }
+function saveLocal(a) { localStorage.setItem(STORAGE_KEY, JSON.stringify(a)); }
+
+// ── map Supabase row → app record ──
+function rowToRec(r) {
+  return {
+    id: r.id,
+    name: r.name,
+    age: r.age != null ? String(r.age) : '',
+    sex: r.sex||'',
+    contact: r.contact||'',
+    trialDate: r.trial_date ? r.trial_date.slice(0,10) : '',
+    coach: r.coach||'',
+    enroll: r.enroll||'',
+    coursePackage: r.course_package_mgmt || r.course_package || '',
+    convStatus: r.conv_status||'follow',
+    remark: r.remark||'',
+    followUps: Array.isArray(r.follow_ups) ? r.follow_ups : [],
+    nextFollowDate: r.next_follow_date ? r.next_follow_date.slice(0,10) : '',
+    health: r.health||null,
+    fitnessData: r.fitness_data||null,
+    createdAt: r.created_at||'',
+    source: r.source||''
+  };
+}
+
+// ── app state ──
+var allStudents = [];
+var currentPage = 1;
+var currentDetailId = null;
+
+// ── utility ──
 function genId(){ return 'r'+Date.now()+Math.random().toString(36).slice(2,7); }
-function loadStudents(){ try{ return JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]'); }catch(e){ return []; } }
-function saveStudents(a){ localStorage.setItem(STORAGE_KEY,JSON.stringify(a)); }
 function toast(msg,dur){
   var t=document.getElementById('toastMsg'); t.textContent=msg; t.style.display='block';
   clearTimeout(t._t); t._t=setTimeout(function(){ t.style.display='none'; },dur||2400);
 }
 function ageGroup(age){ var a=parseInt(age)||0; if(a<=12) return 'child'; if(a<=17) return 'teen'; return 'adult'; }
-function ageGroupLabel(g){ return{child:'儿童',teen:'青少年',adult:'成人'}[g]||'-'; }
-function daysDiff(ds){ var d=new Date(ds),n=new Date(); n.setHours(0,0,0,0); d.setHours(0,0,0,0); return Math.round((n-d)/86400000); }
+function daysDiff(ds){ if(!ds) return 9999; var d=new Date(ds),n=new Date(); n.setHours(0,0,0,0); d.setHours(0,0,0,0); return Math.round((d-n)/86400000); }
 function fmtDate(d){ return d?d.slice(0,10):'-'; }
+function thisMonth(){ return new Date().toISOString().slice(0,7); }
+
+function setSyncBar(type, msg) {
+  var bar = document.getElementById('syncBar');
+  var msgEl = document.getElementById('syncMsg');
+  bar.style.display = 'flex';
+  bar.className = 'sync-bar ' + type;
+  msgEl.innerHTML = (type==='loading' ? '<span class="spin">⟳</span> ' : '') + msg;
+  if (type === 'ok') setTimeout(function(){ bar.style.display='none'; }, 3000);
+}
 
 // ============================================================
 //  Auth
 // ============================================================
-importPending();   // import any record from index.html before auth check
+function getStoredPwd() { return localStorage.getItem(PWD_KEY) || DEFAULT_PWD; }
 
-if(sessionStorage.getItem(SESSION_KEY)==='1'){
-  document.getElementById('lockScreen').style.display='none';
-  document.getElementById('mainContent').style.display='block';
-  initApp();
-} else {
-  (function(){
-    var btn=document.getElementById('lockBtn'), inp=document.getElementById('pwdInput'), err=document.getElementById('lockErr');
-    function tryLogin(){
-      var pwd=localStorage.getItem(PWD_KEY)||DEFAULT_PWD;
-      if(inp.value===pwd){ sessionStorage.setItem(SESSION_KEY,'1'); document.getElementById('lockScreen').style.display='none'; document.getElementById('mainContent').style.display='block'; initApp(); }
-      else{ err.style.display='block'; inp.value=''; inp.focus(); }
-    }
-    btn.addEventListener('click',tryLogin);
-    inp.addEventListener('keydown',function(e){ if(e.key==='Enter') tryLogin(); });
-  })();
+if (sessionStorage.getItem(SESSION_KEY) === '1') {
+  document.getElementById('lockScreen').style.display = 'none';
+  document.getElementById('mainContent').style.display = 'block';
+  loadData();
 }
 
-document.getElementById('logoutBtn').addEventListener('click',function(){ sessionStorage.removeItem(SESSION_KEY); location.reload(); });
-
-document.getElementById('changePwdBtn').addEventListener('click',function(){
-  ['curPwd','newPwd','newPwd2'].forEach(function(id){ document.getElementById(id).value=''; });
-  document.getElementById('pwdModal').classList.add('open');
+document.getElementById('lockBtn').addEventListener('click', function() {
+  var v = document.getElementById('pwdInput').value;
+  if (v === getStoredPwd()) {
+    sessionStorage.setItem(SESSION_KEY, '1');
+    document.getElementById('lockScreen').style.display = 'none';
+    document.getElementById('mainContent').style.display = 'block';
+    loadData();
+  } else {
+    document.getElementById('lockErr').style.display = 'block';
+    document.getElementById('pwdInput').value = '';
+  }
 });
-document.getElementById('pwdClose').addEventListener('click',function(){ document.getElementById('pwdModal').classList.remove('open'); });
-document.getElementById('pwdCancelBtn').addEventListener('click',function(){ document.getElementById('pwdModal').classList.remove('open'); });
-document.getElementById('savePwdBtn').addEventListener('click',function(){
-  var cur=document.getElementById('curPwd').value, n1=document.getElementById('newPwd').value, n2=document.getElementById('newPwd2').value;
-  var stored=localStorage.getItem(PWD_KEY)||DEFAULT_PWD;
-  if(cur!==stored){ toast('当前密码错误'); return; }
-  if(n1.length<6){ toast('新密码至少6位'); return; }
-  if(n1!==n2){ toast('两次密码不一致'); return; }
-  localStorage.setItem(PWD_KEY,n1); document.getElementById('pwdModal').classList.remove('open'); toast('✅ 密码已修改');
-});
+document.getElementById('pwdInput').addEventListener('keydown', function(e){ if(e.key==='Enter') document.getElementById('lockBtn').click(); });
+document.getElementById('logoutBtn').addEventListener('click', function(){ sessionStorage.removeItem(SESSION_KEY); location.reload(); });
+document.getElementById('refreshBtn').addEventListener('click', function(){ loadData(true); });
 
 // ============================================================
-//  Page tabs
+//  Data loading — Supabase primary, localStorage fallback
 // ============================================================
-document.querySelectorAll('.page-tab').forEach(function(btn){
-  btn.addEventListener('click',function(){
-    document.querySelectorAll('.page-tab').forEach(function(b){ b.classList.remove('active'); });
-    btn.classList.add('active');
-    ['tab-list','tab-remind','tab-monthly','tab-coach'].forEach(function(id){ document.getElementById(id).style.display='none'; });
-    var t=btn.dataset.tab; document.getElementById(t).style.display='block';
-    if(t==='tab-remind') renderReminders();
-    if(t==='tab-monthly') renderMonthly();
-    if(t==='tab-coach') renderCoach();
-  });
-});
+function loadData(showToast) {
+  setSyncBar('loading', '正在从云端加载数据…');
+  sbGet('trial_students?order=trial_date.desc,created_at.desc&limit=2000')
+    .then(function(r) {
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      return r.json();
+    })
+    .then(function(rows) {
+      allStudents = rows.map(rowToRec);
+      saveLocal(allStudents); // update local cache
+      setSyncBar('ok', '✓ 数据已同步（共 ' + allStudents.length + ' 条）');
+      if (showToast) toast('已从云端刷新 ' + allStudents.length + ' 条记录');
+      renderAll();
+    })
+    .catch(function(e) {
+      // Fallback to localStorage
+      allStudents = loadLocal();
+      setSyncBar('error', '⚠ 云端连接失败，显示本地缓存数据（' + allStudents.length + ' 条）— ' + e.message);
+      renderAll();
+    });
+}
 
-// ============================================================
-//  State
-// ============================================================
-var students=[], filteredStudents=[], currentPage=1, PAGE_SIZE=20, editingId=null;
-
-function initApp(){
-  students=loadStudents(); populateFilters(); applyFilters();
+function renderAll() {
+  renderStats();
+  renderTable();
+  renderReminders();
+  populateFilters();
+  renderMonthly();
+  renderCoach();
 }
 
 // ============================================================
 //  Filters
 // ============================================================
-function populateFilters(){
-  var months={}, coaches={};
-  students.forEach(function(s){ if(s.trialDate) months[s.trialDate.slice(0,7)]=1; if(s.coach) coaches[s.coach]=1; });
-  var ml=Object.keys(months).sort().reverse(), cl=Object.keys(coaches).sort();
-  ['filterMonth','monthSelect','coachMonthFilter'].forEach(function(id){
-    var sel=document.getElementById(id), v=sel.value;
-    while(sel.options.length>1) sel.remove(1);
-    ml.forEach(function(m){ var o=document.createElement('option'); o.value=m; var p=m.split('-'); o.textContent=p[0]+'年'+parseInt(p[1])+'月'; sel.appendChild(o); });
-    sel.value=v;
-  });
-  ['filterCoach','coachFilter2'].forEach(function(id){
-    var sel=document.getElementById(id), v=sel.value;
-    while(sel.options.length>1) sel.remove(1);
-    cl.forEach(function(c){ var o=document.createElement('option'); o.value=c; o.textContent=c; sel.appendChild(o); });
-    sel.value=v;
-  });
+function getFilters() {
+  return {
+    q:      document.getElementById('searchInput').value.trim().toLowerCase(),
+    month:  document.getElementById('filterMonth').value,
+    coach:  document.getElementById('filterCoach').value,
+    sex:    document.getElementById('filterSex').value,
+    age:    document.getElementById('filterAge').value,
+    status: document.getElementById('filterStatus').value
+  };
 }
 
-function applyFilters(){
-  var search=document.getElementById('searchInput').value.trim().toLowerCase();
-  var month=document.getElementById('filterMonth').value, coach=document.getElementById('filterCoach').value;
-  var sex=document.getElementById('filterSex').value, ageF=document.getElementById('filterAge').value;
-  var status=document.getElementById('filterStatus').value;
-  filteredStudents=students.filter(function(s){
-    if(search && !(s.name||'').toLowerCase().includes(search) && !(s.contact||'').includes(search)) return false;
-    if(month && !(s.trialDate||'').startsWith(month)) return false;
-    if(coach && s.coach!==coach) return false;
-    if(sex && s.sex!==sex) return false;
-    if(ageF && ageGroup(s.age)!==ageF) return false;
-    if(status && (s.convStatus||'follow')!==status) return false;
+function applyFilters(pool) {
+  var f = getFilters();
+  return pool.filter(function(s) {
+    if (f.q && !(s.name.toLowerCase().includes(f.q) || s.contact.includes(f.q))) return false;
+    if (f.month && (!s.trialDate || !s.trialDate.startsWith(f.month))) return false;
+    if (f.coach && s.coach !== f.coach) return false;
+    if (f.sex && s.sex !== f.sex) return false;
+    if (f.age && ageGroup(s.age) !== f.age) return false;
+    if (f.status && s.convStatus !== f.status) return false;
     return true;
   });
-  filteredStudents.sort(function(a,b){ return (b.trialDate||'').localeCompare(a.trialDate||''); });
-  currentPage=1; renderTable(); renderStats();
 }
 
-['searchInput','filterMonth','filterCoach','filterSex','filterAge','filterStatus'].forEach(function(id){
-  document.getElementById(id).addEventListener('input',applyFilters);
-  document.getElementById(id).addEventListener('change',applyFilters);
+function populateFilters() {
+  var months = {}, coaches = {};
+  allStudents.forEach(function(s) {
+    if (s.trialDate) months[s.trialDate.slice(0,7)] = 1;
+    if (s.coach) coaches[s.coach] = 1;
+  });
+  var mSel = document.getElementById('filterMonth');
+  var cur = mSel.value;
+  mSel.innerHTML = '<option value="">全部月份</option>' +
+    Object.keys(months).sort().reverse().map(function(m){ return '<option value="'+m+'"'+(m===cur?' selected':'')+'>'+m+'</option>'; }).join('');
+  var cSel = document.getElementById('filterCoach');
+  var curC = cSel.value;
+  cSel.innerHTML = '<option value="">全部师父</option>' +
+    Object.keys(coaches).sort().map(function(c){ return '<option value="'+c+'"'+(c===curC?' selected':'')+'>'+c+'</option>'; }).join('');
+  // also coach monthly filter
+  var cm = document.getElementById('coachMonthFilter');
+  if (cm) {
+    cm.innerHTML = '<option value="">全部月份</option>' +
+      Object.keys(months).sort().reverse().map(function(m){ return '<option value="'+m+'">'+m+'</option>'; }).join('');
+  }
+  var ms = document.getElementById('monthSelect');
+  if (ms) {
+    var existing = ms.value;
+    ms.innerHTML = Object.keys(months).sort().reverse().map(function(m){ return '<option value="'+m+'">'+m+'</option>'; }).join('');
+    if (!ms.value) ms.value = ms.options[0] ? ms.options[0].value : '';
+    else ms.value = existing || (ms.options[0] ? ms.options[0].value : '');
+  }
+}
+
+['searchInput','filterMonth','filterCoach','filterSex','filterAge','filterStatus'].forEach(function(id) {
+  var el = document.getElementById(id);
+  if (el) el.addEventListener('input', function(){ currentPage=1; renderTable(); });
 });
-document.getElementById('clearFilterBtn').addEventListener('click',function(){
+document.getElementById('clearFilterBtn').addEventListener('click', function() {
   document.getElementById('searchInput').value='';
-  ['filterMonth','filterCoach','filterSex','filterAge','filterStatus'].forEach(function(id){ document.getElementById(id).value=''; });
-  applyFilters();
+  document.getElementById('filterMonth').value='';
+  document.getElementById('filterCoach').value='';
+  document.getElementById('filterSex').value='';
+  document.getElementById('filterAge').value='';
+  document.getElementById('filterStatus').value='';
+  currentPage=1; renderTable();
 });
 
 // ============================================================
-//  Table render  — uses data-id attributes, NO inline onclick
+//  Stats strip
 // ============================================================
-function renderTable(){
-  var total=filteredStudents.length, totalPages=Math.max(1,Math.ceil(total/PAGE_SIZE));
-  if(currentPage>totalPages) currentPage=totalPages;
-  var start=(currentPage-1)*PAGE_SIZE, page=filteredStudents.slice(start,start+PAGE_SIZE);
-  document.getElementById('listSummary').textContent='共 '+total+' 条记录，当前第 '+currentPage+'/'+totalPages+' 页';
-  var tbody=document.getElementById('studentTbody');
-  if(page.length===0){ tbody.innerHTML='<tr><td colspan="12" style="text-align:center;color:#999;padding:24px;">暂无符合条件的记录</td></tr>'; }
-  else {
-    tbody.innerHTML=page.map(function(s,i){
-      var st=s.convStatus||'follow', fc=(s.followUps||[]).length, nf=s.nextFollowDate?fmtDate(s.nextFollowDate):'-';
-      var days=s.trialDate?daysDiff(s.trialDate):null, urg='';
-      if(st!=='enrolled'&&days!==null){ if(days>=14) urg=' ⚠️'; else if(days>=7) urg=' 🔶'; else if(days>=3) urg=' 🔹'; }
-      return '<tr>'
+function renderStats() {
+  var m = thisMonth();
+  var pool = allStudents;
+  var thisM = pool.filter(function(s){ return s.trialDate && s.trialDate.startsWith(m); });
+  var thisEnr = thisM.filter(function(s){ return s.convStatus==='enrolled'; }).length;
+  var total = pool.length;
+  var totalEnr = pool.filter(function(s){ return s.convStatus==='enrolled'; }).length;
+  var monthRate = thisM.length > 0 ? (thisEnr/thisM.length*100).toFixed(1) : '0.0';
+  var totalRate = total > 0 ? (totalEnr/total*100).toFixed(1) : '0.0';
+  var needFollow = pool.filter(function(s){ return s.nextFollowDate && daysDiff(s.nextFollowDate) <= 0 && s.convStatus !== 'enrolled'; }).length;
+
+  document.getElementById('statsStrip').innerHTML = [
+    '<div class="stat-card"><div class="val">'+thisM.length+'</div><div class="lbl">本月体验课</div></div>',
+    '<div class="stat-card green"><div class="val">'+thisEnr+'</div><div class="lbl">本月已报名</div></div>',
+    '<div class="stat-card red"><div class="val">'+(thisM.length-thisEnr)+'</div><div class="lbl">本月未报名</div></div>',
+    '<div class="stat-card orange"><div class="val">'+monthRate+'%</div><div class="lbl">本月转化率</div></div>',
+    '<div class="stat-card"><div class="val">'+total+'</div><div class="lbl">累计体验课</div></div>',
+    '<div class="stat-card green"><div class="val">'+totalEnr+'</div><div class="lbl">累计已报名</div></div>',
+    '<div class="stat-card purple"><div class="val">'+needFollow+'</div><div class="lbl">待跟进提醒</div></div>',
+  ].join('');
+}
+
+// ============================================================
+//  Student table
+// ============================================================
+function renderTable() {
+  var filtered = applyFilters(allStudents);
+  var total = filtered.length;
+  var pages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+  if (currentPage > pages) currentPage = pages;
+  var start = (currentPage-1)*PAGE_SIZE;
+  var page = filtered.slice(start, start+PAGE_SIZE);
+
+  document.getElementById('listSummary').textContent = '共 '+total+' 条记录，当前第 '+currentPage+'/'+pages+' 页';
+
+  var html = '';
+  if (page.length === 0) {
+    html = '<tr><td colspan="11" style="text-align:center;color:#999;padding:24px;">暂无符合条件的记录</td></tr>';
+  } else {
+    page.forEach(function(s, i) {
+      var nfd = s.nextFollowDate ? daysDiff(s.nextFollowDate) : null;
+      var nfdStr = nfd !== null ? (nfd < 0 ? '<span style="color:#c62828;">逾期'+Math.abs(nfd)+'天</span>' : (nfd===0?'<span style="color:#ef6c00;">今天</span>':fmtDate(s.nextFollowDate))) : '-';
+      html += '<tr>'
         +'<td>'+(start+i+1)+'</td>'
-        +'<td><b>'+(s.name||'-')+'</b>'+urg+'</td>'
+        +'<td><b>'+s.name+'</b></td>'
         +'<td>'+(s.age||'-')+'</td>'
         +'<td>'+(s.sex||'-')+'</td>'
         +'<td>'+fmtDate(s.trialDate)+'</td>'
         +'<td>'+(s.coach||'-')+'</td>'
-        +'<td>'+(s.enroll||'-')+'</td>'
         +'<td>'+(s.coursePackage||'-')+'</td>'
-        +'<td><span class="badge '+STATUS_BADGE[st]+'">'+STATUS_LABEL[st]+'</span></td>'
-        +'<td>'+fc+'</td>'
-        +'<td>'+nf+'</td>'
+        +'<td><span class="badge '+(STATUS_BADGE[s.convStatus]||'badge-unknown')+'">'+STATUS_LABEL[s.convStatus]+'</span></td>'
+        +'<td>'+((s.followUps&&s.followUps.length)||0)+'</td>'
+        +'<td>'+nfdStr+'</td>'
         +'<td><button class="btn btn-blue btn-sm do-detail" data-id="'+s.id+'">详情/跟进</button></td>'
         +'</tr>';
-    }).join('');
+    });
   }
-  renderPagination(totalPages);
+  document.getElementById('studentTbody').innerHTML = html;
+
+  // pagination
+  var pgHtml = '';
+  if (pages > 1) {
+    for (var i=1; i<=pages; i++) {
+      pgHtml += '<button class="pg-btn'+(i===currentPage?' active':'')+'" data-page="'+i+'">'+i+'</button>';
+    }
+  }
+  document.getElementById('pagination').innerHTML = pgHtml;
 }
 
-function renderPagination(totalPages){
-  var pg=document.getElementById('pagination');
-  if(totalPages<=1){ pg.innerHTML=''; return; }
-  var html='';
-  for(var i=1;i<=totalPages;i++) html+='<button class="pg-btn'+(i===currentPage?' active':'')+'" data-page="'+i+'">'+i+'</button>';
-  pg.innerHTML=html;
-}
-
-// Event delegation for table buttons and pagination
-document.getElementById('studentTbody').addEventListener('click',function(e){
-  var btn=e.target.closest('.do-detail');
-  if(btn) openDetail(btn.dataset.id);
+document.getElementById('studentTbody').addEventListener('click', function(e) {
+  var btn = e.target.closest('.do-detail');
+  if (btn) openDetail(btn.dataset.id);
 });
-document.getElementById('pagination').addEventListener('click',function(e){
-  var btn=e.target.closest('.pg-btn');
-  if(btn){ currentPage=parseInt(btn.dataset.page); renderTable(); }
+document.getElementById('pagination').addEventListener('click', function(e) {
+  var btn = e.target.closest('.pg-btn');
+  if (btn) { currentPage = parseInt(btn.dataset.page); renderTable(); }
 });
-
-// ============================================================
-//  Stats cards
-// ============================================================
-function renderStats(){
-  var now=new Date().toISOString().slice(0,7);
-  var tm=students.filter(function(s){ return s.trialDate&&s.trialDate.startsWith(now); });
-  var mTotal=tm.length, mEnr=tm.filter(function(s){ return (s.convStatus||'follow')==='enrolled'; }).length;
-  var mNot=tm.filter(function(s){ return ['not','nointent'].indexOf(s.convStatus||'')>=0; }).length;
-  var mRate=mTotal>0?Math.round(mEnr/mTotal*100):0;
-  var cTotal=students.length, cEnr=students.filter(function(s){ return (s.convStatus||'follow')==='enrolled'; }).length;
-  var cRate=cTotal>0?Math.round(cEnr/cTotal*100):0;
-  document.getElementById('statsStrip').innerHTML=
-    '<div class="stat-card blue"><div class="val">'+mTotal+'</div><div class="lbl">本月体验课</div></div>'+
-    '<div class="stat-card green"><div class="val">'+mEnr+'</div><div class="lbl">本月已报名</div></div>'+
-    '<div class="stat-card red"><div class="val">'+mNot+'</div><div class="lbl">本月未报名</div></div>'+
-    '<div class="stat-card orange"><div class="val">'+mRate+'%</div><div class="lbl">本月转化率</div></div>'+
-    '<div class="stat-card"><div class="val">'+cTotal+'</div><div class="lbl">累计体验课</div></div>'+
-    '<div class="stat-card green"><div class="val">'+cEnr+'</div><div class="lbl">累计已报名</div></div>'+
-    '<div class="stat-card purple"><div class="val">'+cRate+'%</div><div class="lbl">累计转化率</div></div>';
-}
 
 // ============================================================
 //  Reminders
 // ============================================================
-function renderReminders(){
-  var today=new Date().toISOString().slice(0,10), items=[];
-  students.forEach(function(s){
-    if((s.convStatus||'follow')==='enrolled') return;
-    var days=s.trialDate?daysDiff(s.trialDate):null;
-    if(s.nextFollowDate&&s.nextFollowDate<=today){
-      items.push({sid:s.id,name:s.name,coach:s.coach,date:s.trialDate,tag:s.nextFollowDate<today?'overdue':'today',label:s.nextFollowDate<today?'已逾期'+daysDiff(s.nextFollowDate)+'天':'今日跟进'});
-      return;
-    }
-    if(days!==null){
-      if(days>=14&&days<21) items.push({sid:s.id,name:s.name,coach:s.coach,date:s.trialDate,tag:'14d',label:'体验课后14天未报名'});
-      else if(days>=7&&days<14) items.push({sid:s.id,name:s.name,coach:s.coach,date:s.trialDate,tag:'7d',label:'体验课后7天未报名'});
-      else if(days>=3&&days<7) items.push({sid:s.id,name:s.name,coach:s.coach,date:s.trialDate,tag:'3d',label:'体验课后3天未报名'});
-    }
+function renderReminders() {
+  var items = [];
+  allStudents.forEach(function(s) {
+    if (!s.nextFollowDate || s.convStatus === 'enrolled') return;
+    var d = daysDiff(s.nextFollowDate);
+    if (d <= 14) items.push({s:s, d:d});
   });
-  var order={overdue:0,today:1,'14d':2,'7d':3,'3d':4};
-  items.sort(function(a,b){ return (order[a.tag]||9)-(order[b.tag]||9); });
-  var list=document.getElementById('reminderList');
-  if(items.length===0){ list.innerHTML='<div class="remind-empty">✅ 今日暂无待跟进学员</div>'; return; }
-  list.innerHTML=items.slice(0,40).map(function(item){
-    return '<div class="remind-row" data-id="'+item.sid+'">'
-      +'<span class="rname">'+(item.name||'-')+'</span>'
-      +'<span class="rtag rtag-'+item.tag+'">'+item.label+'</span>'
-      +'<span class="rcoach">'+(item.coach||'')+'</span>'
-      +'<span style="margin-left:auto;font-size:12px;color:#aaa;">'+fmtDate(item.date)+'</span>'
-      +'</div>';
-  }).join('');
-}
+  items.sort(function(a,b){ return a.d - b.d; });
 
-document.getElementById('reminderList').addEventListener('click',function(e){
-  var row=e.target.closest('.remind-row');
-  if(row) openDetail(row.dataset.id);
-});
-
-// ============================================================
-//  Monthly stats + charts
-// ============================================================
-function renderMonthly(){
-  var sel=document.getElementById('monthSelect');
-  if(!sel.value){
-    var cur=new Date().toISOString().slice(0,7);
-    for(var i=0;i<sel.options.length;i++){ if(sel.options[i].value===cur){ sel.value=cur; break; } }
-    if(!sel.value&&sel.options.length>1) sel.value=sel.options[1].value;
+  var html = '';
+  if (items.length === 0) {
+    html = '<div class="remind-empty">🎉 当前没有待跟进提醒</div>';
+  } else {
+    items.forEach(function(item) {
+      var d = item.d;
+      var tag, tagClass;
+      if (d < 0)  { tag='逾期'+Math.abs(d)+'天'; tagClass='rtag-overdue'; }
+      else if (d===0) { tag='今天'; tagClass='rtag-today'; }
+      else if (d<=3)  { tag=d+'天后'; tagClass='rtag-3d'; }
+      else if (d<=7)  { tag=d+'天后'; tagClass='rtag-7d'; }
+      else            { tag=d+'天后'; tagClass='rtag-14d'; }
+      html += '<div class="remind-row do-remind" data-id="'+item.s.id+'">'
+        +'<span class="rname">'+item.s.name+'</span>'
+        +'<span class="rtag '+tagClass+'">'+tag+'</span>'
+        +'<span style="font-size:12px;color:#666;">'+fmtDate(item.s.nextFollowDate)+' &nbsp;师父：'+(item.s.coach||'-')+'</span>'
+        +'</div>';
+    });
   }
-  var month=sel.value;
-  if(!month){ document.getElementById('monthStatsGrid').innerHTML='<p style="color:#999;padding:10px;">暂无数据</p>'; return; }
-  var g=students.filter(function(s){ return s.trialDate&&s.trialDate.startsWith(month); });
-  var total=g.length, enr=g.filter(function(s){ return (s.convStatus||'follow')==='enrolled'; }).length;
-  var notE=g.filter(function(s){ return ['not','nointent'].indexOf(s.convStatus||'')>=0; }).length;
-  var fol=g.filter(function(s){ return ['follow','consider'].indexOf(s.convStatus||'follow')>=0; }).length;
-  var rate=total>0?(enr/total*100).toFixed(1):'0.0';
-  var male=g.filter(function(s){ return s.sex==='男'; }).length, female=g.filter(function(s){ return s.sex==='女'; }).length;
-  var child=g.filter(function(s){ return ageGroup(s.age)==='child'; }).length;
-  var teen=g.filter(function(s){ return ageGroup(s.age)==='teen'; }).length;
-  var adult=g.filter(function(s){ return ageGroup(s.age)==='adult'; }).length;
-  var p=month.split('-'), ym=p[0]+'年'+parseInt(p[1])+'月';
-  document.getElementById('monthStatsGrid').innerHTML=
-    '<div class="ms-card"><div class="mv">'+total+'</div><div class="ml">'+ym+' 体验课总人数</div></div>'+
-    '<div class="ms-card green"><div class="mv">'+enr+'</div><div class="ml">已报名 / 已转化</div></div>'+
-    '<div class="ms-card red"><div class="mv">'+notE+'</div><div class="ml">未报名 / 无意向</div></div>'+
-    '<div class="ms-card orange"><div class="mv">'+fol+'</div><div class="ml">待跟进 / 考虑中</div></div>'+
-    '<div class="ms-card blue"><div class="mv">'+rate+'%</div><div class="ml">月度转化率（已报名÷总人数）</div></div>'+
-    '<div class="ms-card"><div class="mv">'+male+' / '+female+'</div><div class="ml">男 / 女</div></div>'+
-    '<div class="ms-card"><div class="mv">'+child+'</div><div class="ml">儿童（≤12岁）</div></div>'+
-    '<div class="ms-card"><div class="mv">'+teen+' / '+adult+'</div><div class="ml">青少年 / 成人</div></div>';
-  drawTrendChart(); drawPieChart(month); drawRateChart();
-}
-document.getElementById('monthSelect').addEventListener('change',renderMonthly);
-
-function getLast12(){
-  var r=[],d=new Date();
-  for(var i=11;i>=0;i--){ var t=new Date(d.getFullYear(),d.getMonth()-i,1); r.push(t.getFullYear()+'-'+String(t.getMonth()+1).padStart(2,'0')); }
-  return r;
+  document.getElementById('reminderList').innerHTML = html;
 }
 
-function drawBarChart(canvas,labels,ds){
-  var W=canvas.parentElement.clientWidth||380,H=parseInt(canvas.getAttribute('height'))||180;
-  canvas.width=W; canvas.height=H; var ctx=canvas.getContext('2d'); ctx.clearRect(0,0,W,H);
-  var pL=38,pR=10,pT=16,pB=28,cW=W-pL-pR,cH=H-pT-pB;
-  var allV=[]; ds.forEach(function(d){ allV=allV.concat(d.data); });
-  var maxV=Math.max.apply(null,allV.concat([1])), n=labels.length, bw=cW/n*0.35;
-  ctx.strokeStyle='#e8e0d4'; ctx.lineWidth=0.8;
-  for(var g=0;g<=4;g++){ var gy=pT+cH*(1-g/4); ctx.beginPath(); ctx.moveTo(pL,gy); ctx.lineTo(pL+cW,gy); ctx.stroke(); ctx.fillStyle='#888'; ctx.font='10px sans-serif'; ctx.textAlign='right'; ctx.fillText(Math.round(maxV*g/4),pL-3,gy+3); }
-  ds.forEach(function(d,di){ ctx.fillStyle=d.color+'99';
-    d.data.forEach(function(v,i){ var x=pL+i*(cW/n)+di*bw+(cW/n-ds.length*bw)/2, bH=(v/maxV)*cH; ctx.fillStyle=d.color+'99'; ctx.fillRect(x,pT+cH-bH,bw-1,bH); if(v>0){ ctx.fillStyle='#444'; ctx.font='10px sans-serif'; ctx.textAlign='center'; ctx.fillText(v,x+bw/2,pT+cH-bH-2); } });
-  });
-  ctx.fillStyle='#666'; ctx.font='10px sans-serif'; ctx.textAlign='center';
-  labels.forEach(function(l,i){ ctx.fillText(l,pL+i*(cW/n)+cW/(n*2),pT+cH+14); });
-}
-
-function drawLineChart(canvas,labels,data,color,suffix){
-  suffix=suffix||''; var W=canvas.parentElement.clientWidth||560,H=parseInt(canvas.getAttribute('height'))||160;
-  canvas.width=W; canvas.height=H; var ctx=canvas.getContext('2d'); ctx.clearRect(0,0,W,H);
-  var pL=38,pR=10,pT=16,pB=28,cW=W-pL-pR,cH=H-pT-pB;
-  var maxV=Math.max.apply(null,data.concat([1])), n=labels.length, step=n>1?cW/(n-1):cW;
-  ctx.strokeStyle='#e8e0d4'; ctx.lineWidth=0.8;
-  for(var g=0;g<=4;g++){ var gy=pT+cH*(1-g/4); ctx.beginPath(); ctx.moveTo(pL,gy); ctx.lineTo(pL+cW,gy); ctx.stroke(); ctx.fillStyle='#888'; ctx.font='10px sans-serif'; ctx.textAlign='right'; ctx.fillText(Math.round(maxV*g/4)+suffix,pL-3,gy+3); }
-  ctx.strokeStyle=color; ctx.lineWidth=2; ctx.beginPath();
-  data.forEach(function(v,i){ var x=pL+i*step,y=pT+cH*(1-v/maxV); i===0?ctx.moveTo(x,y):ctx.lineTo(x,y); }); ctx.stroke();
-  data.forEach(function(v,i){ var x=pL+i*step,y=pT+cH*(1-v/maxV); ctx.beginPath(); ctx.arc(x,y,3,0,2*Math.PI); ctx.fillStyle=color; ctx.fill(); if(v>0){ ctx.fillStyle='#444'; ctx.font='10px sans-serif'; ctx.textAlign='center'; ctx.fillText(v+suffix,x,y-5); } });
-  ctx.fillStyle='#666'; ctx.font='10px sans-serif'; ctx.textAlign='center';
-  labels.forEach(function(l,i){ ctx.fillText(l,pL+i*step,pT+cH+14); });
-}
-
-function drawPie(canvas,labels,data,colors){
-  var W=canvas.parentElement.clientWidth||280,H=parseInt(canvas.getAttribute('height'))||180;
-  canvas.width=W; canvas.height=H; var ctx=canvas.getContext('2d'); ctx.clearRect(0,0,W,H);
-  var total=data.reduce(function(a,b){ return a+b; },0);
-  if(total===0){ ctx.fillStyle='#ccc'; ctx.font='13px sans-serif'; ctx.textAlign='center'; ctx.fillText('暂无数据',W/2,H/2); return; }
-  var legW=100,cx=(W-legW)/2,cy=H/2,R=Math.min(cx,cy)-12,angle=-Math.PI/2;
-  data.forEach(function(v,i){ if(v===0) return; var sl=(v/total)*2*Math.PI; ctx.beginPath(); ctx.moveTo(cx,cy); ctx.arc(cx,cy,R,angle,angle+sl); ctx.closePath(); ctx.fillStyle=colors[i]; ctx.fill(); angle+=sl; });
-  ctx.font='11px sans-serif'; labels.forEach(function(l,i){ var lx=W-legW+4,ly=20+i*18; ctx.fillStyle=colors[i]; ctx.fillRect(lx,ly-9,12,12); ctx.fillStyle='#333'; ctx.textAlign='left'; ctx.fillText(l+': '+data[i],lx+16,ly); });
-}
-
-function drawTrendChart(){
-  var months=getLast12(), labels=months.map(function(m){ return parseInt(m.split('-')[1])+'月'; });
-  var totals=months.map(function(m){ return students.filter(function(s){ return s.trialDate&&s.trialDate.startsWith(m); }).length; });
-  var enrs=months.map(function(m){ return students.filter(function(s){ return s.trialDate&&s.trialDate.startsWith(m)&&(s.convStatus||'follow')==='enrolled'; }).length; });
-  drawBarChart(document.getElementById('trendChart'),labels,[{label:'体验课',data:totals,color:'#1565c0'},{label:'已报名',data:enrs,color:'#2e7d32'}]);
-}
-function drawRateChart(){
-  var months=getLast12(), labels=months.map(function(m){ return parseInt(m.split('-')[1])+'月'; });
-  var rates=months.map(function(m){ var g=students.filter(function(s){ return s.trialDate&&s.trialDate.startsWith(m); }); return g.length===0?0:Math.round(g.filter(function(s){ return (s.convStatus||'follow')==='enrolled'; }).length/g.length*100); });
-  drawLineChart(document.getElementById('rateChart'),labels,rates,'#b76d2c','%');
-}
-function drawPieChart(month){
-  var g=students.filter(function(s){ return s.trialDate&&s.trialDate.startsWith(month); });
-  drawPie(document.getElementById('pieChart'),['已报名','待跟进','考虑中','无意向','未报名'],
-    [g.filter(function(s){ return (s.convStatus||'follow')==='enrolled'; }).length,
-     g.filter(function(s){ return (s.convStatus||'follow')==='follow'; }).length,
-     g.filter(function(s){ return (s.convStatus||'follow')==='consider'; }).length,
-     g.filter(function(s){ return (s.convStatus||'follow')==='nointent'; }).length,
-     g.filter(function(s){ return (s.convStatus||'follow')==='not'; }).length],
-    ['#4caf50','#fb8c00','#1e88e5','#9c27b0','#e53935']);
-}
-
-// ============================================================
-//  Coach stats
-// ============================================================
-function renderCoach(){
-  var coachF=document.getElementById('coachFilter2').value, monthF=document.getElementById('coachMonthFilter').value;
-  var pool=monthF?students.filter(function(s){ return s.trialDate&&s.trialDate.startsWith(monthF); }):students;
-  var map={};
-  pool.forEach(function(s){ var c=s.coach||'（未填写）'; if(!map[c]) map[c]=[]; map[c].push(s); });
-  var rows=Object.keys(map).map(function(c){ var arr=map[c]; var enr=arr.filter(function(s){ return (s.convStatus||'follow')==='enrolled'; }).length; var not=arr.filter(function(s){ return ['not','nointent'].indexOf(s.convStatus||'')>=0; }).length; var fol=arr.filter(function(s){ return ['follow','consider'].indexOf(s.convStatus||'follow')>=0; }).length; return {c:c,total:arr.length,enr:enr,not:not,fol:fol,rate:arr.length>0?(enr/arr.length*100).toFixed(1):'0.0'}; }).sort(function(a,b){ return parseFloat(b.rate)-parseFloat(a.rate); });
-  document.getElementById('coachTbody').innerHTML=rows.map(function(r){
-    return '<tr data-coach="'+encodeURIComponent(r.c)+'">'
-      +'<td><b>'+r.c+'</b></td><td>'+r.total+'</td>'
-      +'<td><span class="badge badge-enrolled">'+r.enr+'</span></td>'
-      +'<td><span class="badge badge-not">'+r.not+'</span></td>'
-      +'<td><span class="badge badge-follow">'+r.fol+'</span></td>'
-      +'<td><b>'+r.rate+'%</b></td>'
-      +'<td><div class="rate-bar" style="width:100px;"><div class="rate-fill" style="width:'+r.rate+'%;"></div></div></td>'
-      +'</tr>';
-  }).join('')||'<tr><td colspan="7" style="text-align:center;color:#999;padding:14px;">暂无数据</td></tr>';
-  document.getElementById('coachTbody').addEventListener('click',function(e){ var tr=e.target.closest('tr'); if(tr&&tr.dataset.coach) showCoachDetail(decodeURIComponent(tr.dataset.coach),pool); });
-  drawCoachChart(rows);
-  if(coachF) showCoachDetail(coachF,pool);
-}
-document.getElementById('coachFilter2').addEventListener('change',renderCoach);
-document.getElementById('coachMonthFilter').addEventListener('change',renderCoach);
-
-function showCoachDetail(coachName,pool){
-  var arr=pool.filter(function(s){ return (s.coach||'（未填写）')===coachName; });
-  document.getElementById('coachDetail').style.display='block';
-  document.getElementById('coachDetailTitle').textContent=coachName+' — 学员名单（'+arr.length+'人）';
-  document.getElementById('coachDetailTbody').innerHTML=arr.map(function(s,i){
-    var st=s.convStatus||'follow';
-    return '<tr><td>'+(i+1)+'</td><td><b>'+(s.name||'-')+'</b></td><td>'+(s.age||'-')+'</td><td>'+(s.sex||'-')+'</td>'
-      +'<td>'+fmtDate(s.trialDate)+'</td><td>'+(s.enroll||'-')+'</td>'
-      +'<td><span class="badge '+STATUS_BADGE[st]+'">'+STATUS_LABEL[st]+'</span></td>'
-      +'<td>'+((s.followUps||[]).length)+'</td>'
-      +'<td><button class="btn btn-blue btn-sm do-detail" data-id="'+s.id+'">详情</button></td>'
-      +'</tr>';
-  }).join('');
-  document.getElementById('coachDetailTbody').addEventListener('click',function(e){ var btn=e.target.closest('.do-detail'); if(btn) openDetail(btn.dataset.id); });
-}
-
-function drawCoachChart(rows){
-  var canvas=document.getElementById('coachChart'), W=canvas.parentElement.clientWidth||600, H=220;
-  canvas.width=W; canvas.height=H; var ctx=canvas.getContext('2d'); ctx.clearRect(0,0,W,H);
-  if(!rows||rows.length===0) return;
-  var pL=38,pR=10,pT=16,pB=44,cW=W-pL-pR,cH=H-pT-pB, n=rows.length, bw=Math.min(48,cW/n*0.55);
-  [0,25,50,75,100].forEach(function(v){ var y=pT+cH*(1-v/100); ctx.strokeStyle='#e8e0d4'; ctx.lineWidth=0.8; ctx.beginPath(); ctx.moveTo(pL,y); ctx.lineTo(pL+cW,y); ctx.stroke(); ctx.fillStyle='#888'; ctx.font='10px sans-serif'; ctx.textAlign='right'; ctx.fillText(v+'%',pL-3,y+3); });
-  rows.forEach(function(r,i){ var x=pL+i*(cW/n)+(cW/n-bw)/2, rate=parseFloat(r.rate)||0, bH=(rate/100)*cH; ctx.fillStyle='#b76d2c88'; ctx.fillRect(x,pT+cH-bH,bw,bH); ctx.fillStyle='#6b3a17'; ctx.font='bold 11px sans-serif'; ctx.textAlign='center'; ctx.fillText(r.rate+'%',x+bw/2,pT+cH-bH-(bH>14?5:-10)); ctx.fillStyle='#444'; ctx.font='11px sans-serif'; ctx.fillText((r.c.length>6?r.c.slice(0,6)+'…':r.c),x+bw/2,pT+cH+16); ctx.fillStyle='#888'; ctx.font='10px sans-serif'; ctx.fillText('('+r.total+'人)',x+bw/2,pT+cH+30); });
-}
+document.getElementById('reminderList').addEventListener('click', function(e) {
+  var row = e.target.closest('.do-remind');
+  if (row) openDetail(row.dataset.id);
+});
 
 // ============================================================
 //  Detail modal
 // ============================================================
-function openDetail(id){
-  var s=students.find(function(x){ return x.id===id; });
-  if(!s) return;
-  editingId=id;
-  document.getElementById('detailTitle').textContent='学员详情 — '+(s.name||'-');
-  document.getElementById('detailInfo').innerHTML=
-    '<div><div class="ig-lbl">姓名</div><div class="ig-val">'+(s.name||'-')+'</div></div>'+
-    '<div><div class="ig-lbl">年龄</div><div class="ig-val">'+(s.age||'-')+' 岁 （'+ageGroupLabel(ageGroup(s.age))+'）</div></div>'+
-    '<div><div class="ig-lbl">性别</div><div class="ig-val">'+(s.sex||'-')+'</div></div>'+
-    '<div><div class="ig-lbl">联系电话</div><div class="ig-val">'+(s.contact||'-')+'</div></div>'+
-    '<div><div class="ig-lbl">体验课日期</div><div class="ig-val">'+fmtDate(s.trialDate)+'</div></div>'+
-    '<div><div class="ig-lbl">代课师父</div><div class="ig-val">'+(s.coach||'-')+'</div></div>'+
-    '<div><div class="ig-lbl">是否报课</div><div class="ig-val">'+(s.enroll||'-')+'</div></div>'+
-    '<div><div class="ig-lbl">课程套餐</div><div class="ig-val">'+(s.coursePackage||'-')+'</div></div>'+
-    '<div><div class="ig-lbl">备注</div><div class="ig-val">'+(s.remark||'-')+'</div></div>'+
-    '<div><div class="ig-lbl">记录ID</div><div class="ig-val" style="font-size:11px;color:#aaa;">'+s.id+'</div></div>';
-  document.getElementById('statusSelect').value=s.convStatus||'follow';
-  document.getElementById('packageInput').value=s.coursePackage||'';
+function openDetail(id) {
+  var s = allStudents.find(function(x){ return x.id === id; });
+  if (!s) return;
+  currentDetailId = id;
+
+  document.getElementById('detailTitle').textContent = '学员详情 — '+s.name;
+  document.getElementById('detailInfo').innerHTML = [
+    '<div class="ig-lbl">姓名</div><div class="ig-val">'+s.name+'</div>',
+    '<div class="ig-lbl">年龄</div><div class="ig-val">'+(s.age||'-')+'</div>',
+    '<div class="ig-lbl">性别</div><div class="ig-val">'+(s.sex||'-')+'</div>',
+    '<div class="ig-lbl">联系电话</div><div class="ig-val">'+(s.contact||'-')+'</div>',
+    '<div class="ig-lbl">体验课日期</div><div class="ig-val">'+fmtDate(s.trialDate)+'</div>',
+    '<div class="ig-lbl">代课师父</div><div class="ig-val">'+(s.coach||'-')+'</div>',
+    '<div class="ig-lbl">课程套餐</div><div class="ig-val">'+(s.coursePackage||'-')+'</div>',
+    '<div class="ig-lbl">来源</div><div class="ig-val">'+(s.source||'-')+'</div>',
+  ].join('');
+
+  // health box
+  var hBox = document.getElementById('detailHealthBox');
+  var hRows = document.getElementById('detailHealthRows');
+  if (s.health && (s.health.congDisease || s.health.surgery || s.health.exerciseBg)) {
+    var items = [];
+    if (s.health.congDisease) items.push('<div class="health-item"><div class="hl">先天疾病</div><div class="hv">'
+      +s.health.congDisease+(s.health.congDiseaseDetail?' — '+s.health.congDiseaseDetail:'')+'</div></div>');
+    if (s.health.surgery) items.push('<div class="health-item"><div class="hl">手术史</div><div class="hv">'
+      +s.health.surgery+(s.health.surgeryType?' — '+s.health.surgeryType:'')+(s.health.surgeryDate?' ('+s.health.surgeryDate+')':'')+'</div></div>');
+    if (s.health.exerciseBg) items.push('<div class="health-item"><div class="hl">运动基础</div><div class="hv">'
+      +s.health.exerciseBg+(s.health.exerciseBgDetail?' — '+s.health.exerciseBgDetail:'')+'</div></div>');
+    if (items.length) { hRows.innerHTML = items.join(''); hBox.style.display='block'; }
+    else hBox.style.display='none';
+  } else { hBox.style.display='none'; }
+
+  // follow-ups
   renderFollowList(s);
+
+  // status
+  document.getElementById('statusSelect').value = s.convStatus || 'follow';
+  document.getElementById('packageInput').value = s.coursePackage || '';
+
   document.getElementById('detailModal').classList.add('open');
 }
 
-function closeDetail(){ document.getElementById('detailModal').classList.remove('open'); editingId=null; }
-
-function renderFollowList(s){
-  var follows=(s.followUps||[]).slice().reverse();
-  document.getElementById('followList').innerHTML=follows.length===0
-    ?'<p style="color:#999;font-size:13px;text-align:center;padding:12px;">暂无跟进记录</p>'
-    :follows.map(function(f,i){
-        var realIdx=follows.length-1-i;
-        return '<div class="follow-item">'
-          +'<button class="fi-del" data-sid="'+s.id+'" data-idx="'+realIdx+'">×</button>'
-          +'<div class="fi-date">'+fmtDate(f.date)+'</div>'
-          +'<span class="fi-method">'+f.method+'</span>'
-          +'<div class="fi-result">'+f.result+'</div>'
-          +(f.nextDate?'<div class="fi-next">📅 下次跟进：'+fmtDate(f.nextDate)+'</div>':'')
-          +(f.note?'<div style="font-size:12px;color:#888;">备注：'+f.note+'</div>':'')
-          +'</div>';
-      }).join('');
+function renderFollowList(s) {
+  var fus = s.followUps || [];
+  var html = '';
+  if (fus.length === 0) {
+    html = '<div style="color:#999;font-size:13px;text-align:center;padding:12px;">暂无跟进记录</div>';
+  } else {
+    fus.forEach(function(f, i) {
+      html += '<div class="follow-item">'
+        +'<span class="fi-date">'+fmtDate(f.date)+'</span>'
+        +'<span class="fi-method">'+f.method+'</span>'
+        +'<div class="fi-result">'+f.result+'</div>'
+        +(f.next ? '<div class="fi-next">📅 下次跟进：'+fmtDate(f.next)+'</div>' : '')
+        +(f.note ? '<div style="font-size:12px;color:#888;">备注：'+f.note+'</div>' : '')
+        +'<button class="fi-del" data-idx="'+i+'" title="删除">×</button>'
+        +'</div>';
+    });
+  }
+  document.getElementById('followList').innerHTML = html;
 }
 
-document.getElementById('followList').addEventListener('click',function(e){
-  var btn=e.target.closest('.fi-del');
-  if(!btn) return;
-  var sid=btn.dataset.sid, idx=parseInt(btn.dataset.idx);
-  if(!confirm('删除此跟进记录？')) return;
-  var si=students.findIndex(function(s){ return s.id===sid; });
-  if(si<0) return;
-  students[si].followUps.splice(idx,1); saveStudents(students); renderFollowList(students[si]); toast('已删除');
+document.getElementById('followList').addEventListener('click', function(e) {
+  var btn = e.target.closest('.fi-del');
+  if (!btn || !currentDetailId) return;
+  var idx = parseInt(btn.dataset.idx);
+  if (!confirm('确认删除这条跟进记录？')) return;
+  var s = allStudents.find(function(x){ return x.id===currentDetailId; });
+  if (!s) return;
+  s.followUps.splice(idx, 1);
+  saveAndSync(s, function() { renderFollowList(s); renderAll(); toast('跟进记录已删除'); });
 });
 
-document.getElementById('detailClose').addEventListener('click',closeDetail);
-document.getElementById('detailCancelBtn').addEventListener('click',closeDetail);
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
 
-document.getElementById('saveDetailBtn').addEventListener('click',function(){
-  if(!editingId) return;
-  var idx=students.findIndex(function(s){ return s.id===editingId; });
-  if(idx<0) return;
-  var ns=document.getElementById('statusSelect').value, np=document.getElementById('packageInput').value.trim();
-  students[idx].convStatus=ns;
-  if(ns==='enrolled') students[idx].enroll='是';
-  if(np) students[idx].coursePackage=np;
-  saveStudents(students); closeDetail(); applyFilters(); populateFilters(); toast('✅ 状态已保存');
+document.getElementById('detailClose').addEventListener('click', function(){ closeModal('detailModal'); });
+document.getElementById('detailCancelBtn').addEventListener('click', function(){ closeModal('detailModal'); });
+
+document.getElementById('saveDetailBtn').addEventListener('click', function() {
+  var s = allStudents.find(function(x){ return x.id===currentDetailId; });
+  if (!s) return;
+  s.convStatus = document.getElementById('statusSelect').value;
+  s.coursePackage = document.getElementById('packageInput').value.trim();
+  saveAndSync(s, function() {
+    closeModal('detailModal');
+    renderAll();
+    toast('状态已保存');
+  });
 });
 
-document.getElementById('deleteRecordBtn').addEventListener('click',function(){
-  if(!editingId) return;
-  if(!confirm('确认删除该学员记录？此操作不可撤销。')) return;
-  students=students.filter(function(s){ return s.id!==editingId; });
-  saveStudents(students); closeDetail(); applyFilters(); populateFilters(); toast('已删除学员记录');
+document.getElementById('deleteRecordBtn').addEventListener('click', function() {
+  var s = allStudents.find(function(x){ return x.id===currentDetailId; });
+  if (!s || !confirm('确认删除学员「'+s.name+'」的记录？此操作不可恢复。')) return;
+  // delete from Supabase
+  sbDelete('trial_students?id=eq.'+s.id)
+    .catch(function(e){ console.warn('Supabase delete failed:', e.message); });
+  // delete local
+  allStudents = allStudents.filter(function(x){ return x.x!==s.id; });
+  allStudents = allStudents.filter(function(x){ return x.id!==s.id; });
+  saveLocal(allStudents);
+  closeModal('detailModal');
+  renderAll();
+  toast('记录已删除');
 });
 
 // ============================================================
 //  Follow-up modal
 // ============================================================
-document.getElementById('addFollowBtn').addEventListener('click',function(){
-  document.getElementById('followDate').value=new Date().toISOString().slice(0,10);
-  ['followResult','followNote'].forEach(function(id){ document.getElementById(id).value=''; });
-  document.getElementById('followNext').value='';
+document.getElementById('addFollowBtn').addEventListener('click', function() {
+  document.getElementById('followDate').value = new Date().toISOString().slice(0,10);
+  document.getElementById('followMethod').value = '电话';
+  document.getElementById('followResult').value = '';
+  document.getElementById('followNext').value = '';
+  document.getElementById('followNote').value = '';
   document.getElementById('followModal').classList.add('open');
 });
-document.getElementById('followClose').addEventListener('click',function(){ document.getElementById('followModal').classList.remove('open'); });
-document.getElementById('followCancelBtn').addEventListener('click',function(){ document.getElementById('followModal').classList.remove('open'); });
+document.getElementById('followClose').addEventListener('click', function(){ closeModal('followModal'); });
+document.getElementById('followCancelBtn').addEventListener('click', function(){ closeModal('followModal'); });
 
-document.getElementById('saveFollowBtn').addEventListener('click',function(){
-  var date=document.getElementById('followDate').value, method=document.getElementById('followMethod').value;
-  var result=document.getElementById('followResult').value.trim();
-  if(!date||!result){ toast('⚠️ 请填写跟进日期和跟进结果'); return; }
-  var idx=students.findIndex(function(s){ return s.id===editingId; });
-  if(idx<0) return;
-  if(!students[idx].followUps) students[idx].followUps=[];
-  var nextDate=document.getElementById('followNext').value||'';
-  students[idx].followUps.push({date:date,method:method,result:result,nextDate:nextDate,note:document.getElementById('followNote').value.trim()});
-  if(nextDate) students[idx].nextFollowDate=nextDate;
-  saveStudents(students);
-  document.getElementById('followModal').classList.remove('open');
-  renderFollowList(students[idx]); renderReminders(); toast('✅ 跟进记录已保存');
+document.getElementById('saveFollowBtn').addEventListener('click', function() {
+  var result = document.getElementById('followResult').value.trim();
+  if (!result) { alert('请填写跟进结果'); return; }
+  var s = allStudents.find(function(x){ return x.id===currentDetailId; });
+  if (!s) return;
+  var fu = {
+    date: document.getElementById('followDate').value,
+    method: document.getElementById('followMethod').value,
+    result: result,
+    next: document.getElementById('followNext').value,
+    note: document.getElementById('followNote').value.trim()
+  };
+  if (!s.followUps) s.followUps = [];
+  s.followUps.push(fu);
+  if (fu.next) s.nextFollowDate = fu.next;
+  saveAndSync(s, function() {
+    closeModal('followModal');
+    renderFollowList(s);
+    renderAll();
+    toast('跟进记录已保存');
+  });
 });
 
 // ============================================================
-//  Add student modal
+//  Add manual student modal
 // ============================================================
-document.getElementById('addManualBtn').addEventListener('click',function(){
+document.getElementById('addManualBtn').addEventListener('click', function() {
   ['addName','addContact','addAge','addCoach','addPackage','addRemark'].forEach(function(id){ document.getElementById(id).value=''; });
-  document.getElementById('addSex').value=''; document.getElementById('addEnroll').value=''; document.getElementById('addStatus').value='follow';
+  document.getElementById('addSex').value='';
   document.getElementById('addDate').value=new Date().toISOString().slice(0,10);
+  document.getElementById('addStatus').value='follow';
   document.getElementById('addModal').classList.add('open');
 });
-document.getElementById('addClose').addEventListener('click',function(){ document.getElementById('addModal').classList.remove('open'); });
-document.getElementById('addCancelBtn').addEventListener('click',function(){ document.getElementById('addModal').classList.remove('open'); });
+document.getElementById('addClose').addEventListener('click', function(){ closeModal('addModal'); });
+document.getElementById('addCancelBtn').addEventListener('click', function(){ closeModal('addModal'); });
 
-document.getElementById('saveAddBtn').addEventListener('click',function(){
-  var name=document.getElementById('addName').value.trim(), date=document.getElementById('addDate').value;
-  if(!name||!date){ toast('⚠️ 姓名和体验课日期为必填项'); return; }
-  var rec={id:genId(),name:name,contact:document.getElementById('addContact').value.trim(),age:document.getElementById('addAge').value,sex:document.getElementById('addSex').value,trialDate:date,coach:document.getElementById('addCoach').value.trim(),coursePackage:document.getElementById('addPackage').value.trim(),enroll:document.getElementById('addEnroll').value,convStatus:document.getElementById('addStatus').value||'follow',remark:document.getElementById('addRemark').value.trim(),followUps:[],nextFollowDate:'',createdAt:new Date().toISOString(),source:'manual'};
-  students.unshift(rec); saveStudents(students);
-  document.getElementById('addModal').classList.remove('open');
-  applyFilters(); populateFilters(); toast('✅ 学员记录已添加');
+document.getElementById('saveAddBtn').addEventListener('click', function() {
+  var name = document.getElementById('addName').value.trim();
+  var date = document.getElementById('addDate').value;
+  if (!name) { alert('请填写学员姓名'); return; }
+  if (!date) { alert('请填写体验课日期'); return; }
+  var rec = {
+    id: genId(),
+    name: name,
+    age: document.getElementById('addAge').value,
+    sex: document.getElementById('addSex').value,
+    contact: document.getElementById('addContact').value.trim(),
+    trialDate: date,
+    coach: document.getElementById('addCoach').value.trim(),
+    enroll: '',
+    coursePackage: document.getElementById('addPackage').value.trim(),
+    convStatus: document.getElementById('addStatus').value,
+    remark: document.getElementById('addRemark').value.trim(),
+    followUps: [], nextFollowDate: '',
+    health: null, fitnessData: null,
+    createdAt: new Date().toISOString(),
+    source: 'manual'
+  };
+  allStudents.unshift(rec);
+  saveLocal(allStudents);
+  // Sync to Supabase
+  sbPost('trial_students', {
+    id: rec.id, name: rec.name,
+    age: rec.age ? parseInt(rec.age) : null,
+    sex: rec.sex, contact: rec.contact,
+    trial_date: rec.trialDate, coach: rec.coach,
+    conv_status: rec.convStatus, remark: rec.remark,
+    course_package_mgmt: rec.coursePackage,
+    follow_ups: [], created_at: rec.createdAt, source: rec.source
+  }).catch(function(e){ console.warn('Supabase add failed:', e.message); });
+  closeModal('addModal');
+  renderAll();
+  toast('学员已添加');
 });
+
+// ============================================================
+//  Save + sync helper
+// ============================================================
+function saveAndSync(s, cb) {
+  // update local array + cache
+  var idx = allStudents.findIndex(function(x){ return x.id===s.id; });
+  if (idx >= 0) allStudents[idx] = s;
+  saveLocal(allStudents);
+
+  // patch Supabase
+  sbPatch('trial_students?id=eq.'+s.id, {
+    conv_status: s.convStatus,
+    course_package_mgmt: s.coursePackage,
+    follow_ups: s.followUps,
+    next_follow_date: s.nextFollowDate || null,
+    updated_at: new Date().toISOString()
+  }).catch(function(e){ console.warn('Supabase patch failed:', e.message); });
+
+  if (cb) cb();
+}
+
+// ============================================================
+//  Page tabs
+// ============================================================
+var tabs = ['tab-list','tab-remind','tab-monthly','tab-coach'];
+document.querySelector('.page-tabs').addEventListener('click', function(e) {
+  var btn = e.target.closest('.page-tab');
+  if (!btn) return;
+  var target = btn.dataset.tab;
+  document.querySelectorAll('.page-tab').forEach(function(b){ b.classList.remove('active'); });
+  btn.classList.add('active');
+  tabs.forEach(function(t){ document.getElementById(t).style.display = t===target?'block':'none'; });
+  if (target==='tab-monthly') renderMonthly();
+  if (target==='tab-coach') renderCoach();
+});
+
+// ============================================================
+//  Monthly stats
+// ============================================================
+function renderMonthly() {
+  var sel = document.getElementById('monthSelect');
+  var m = sel ? sel.value : thisMonth();
+  if (!m) return;
+
+  var pool = allStudents.filter(function(s){ return s.trialDate && s.trialDate.startsWith(m); });
+  var enr = pool.filter(function(s){ return s.convStatus==='enrolled'; }).length;
+  var rate = pool.length > 0 ? (enr/pool.length*100).toFixed(1) : '0.0';
+
+  var counts = {enrolled:0, follow:0, consider:0, nointent:0, not:0};
+  pool.forEach(function(s){ if(counts[s.convStatus]!==undefined) counts[s.convStatus]++; else counts.follow++; });
+
+  document.getElementById('monthStatsGrid').innerHTML = [
+    '<div class="ms-card"><div class="mv">'+pool.length+'</div><div class="ml">体验课学员</div></div>',
+    '<div class="ms-card green"><div class="mv">'+enr+'</div><div class="ml">已报名（转化）</div></div>',
+    '<div class="ms-card red"><div class="mv">'+(pool.length-enr)+'</div><div class="ml">未报名</div></div>',
+    '<div class="ms-card orange"><div class="mv">'+rate+'%</div><div class="ml">转化率</div></div>',
+  ].join('');
+
+  drawTrendChart();
+  drawPieChart(counts);
+  drawRateChart();
+}
+
+document.getElementById('monthSelect').addEventListener('change', renderMonthly);
+
+// ── canvas charts ──
+function drawTrendChart() {
+  var canvas = document.getElementById('trendChart');
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+  canvas.width = canvas.parentElement.offsetWidth - 24;
+  var months = getLast12Months();
+  var vals = months.map(function(m){ return allStudents.filter(function(s){ return s.trialDate&&s.trialDate.startsWith(m); }).length; });
+  drawBarChart(ctx, canvas.width, 180, months.map(function(m){ return m.slice(5); }), vals, '#6b3a17');
+}
+
+function drawPieChart(counts) {
+  var canvas = document.getElementById('pieChart');
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+  canvas.width = canvas.parentElement.offsetWidth - 24;
+  var colors = {enrolled:'#4caf50',follow:'#ff9800',consider:'#ffeb3b',nointent:'#9c27b0',not:'#f44336'};
+  var labels = {enrolled:'已报名',follow:'待跟进',consider:'暂时考虑',nointent:'无意向',not:'未报名'};
+  var data = Object.keys(counts).filter(function(k){ return counts[k]>0; }).map(function(k){ return {label:labels[k],value:counts[k],color:colors[k]}; });
+  if (data.length===0) { ctx.clearRect(0,0,canvas.width,180); return; }
+  var total = data.reduce(function(s,d){ return s+d.value; },0);
+  var cx=canvas.width/2, cy=80, r=60, angle=-Math.PI/2;
+  ctx.clearRect(0,0,canvas.width,180);
+  data.forEach(function(d) {
+    var slice = (d.value/total)*Math.PI*2;
+    ctx.beginPath(); ctx.moveTo(cx,cy); ctx.arc(cx,cy,r,angle,angle+slice); ctx.closePath();
+    ctx.fillStyle=d.color; ctx.fill();
+    angle+=slice;
+  });
+  // legend
+  var ly=155; var lx=10;
+  data.forEach(function(d) {
+    ctx.fillStyle=d.color; ctx.fillRect(lx,ly-10,12,12);
+    ctx.fillStyle='#333'; ctx.font='11px Arial'; ctx.fillText(d.label+' '+d.value, lx+16, ly);
+    lx += ctx.measureText(d.label+' '+d.value).width + 32;
+    if (lx > canvas.width - 80) { lx=10; ly+=16; }
+  });
+}
+
+function drawRateChart() {
+  var canvas = document.getElementById('rateChart');
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+  canvas.width = canvas.parentElement.offsetWidth - 24;
+  var months = getLast12Months();
+  var rates = months.map(function(m) {
+    var pool = allStudents.filter(function(s){ return s.trialDate&&s.trialDate.startsWith(m); });
+    if (!pool.length) return 0;
+    return parseFloat((pool.filter(function(s){ return s.convStatus==='enrolled'; }).length/pool.length*100).toFixed(1));
+  });
+  drawLineChart(ctx, canvas.width, 160, months.map(function(m){ return m.slice(5); }), rates, '#2e7d32');
+}
+
+function getLast12Months() {
+  var months=[], d=new Date();
+  for(var i=11;i>=0;i--){ var t=new Date(d.getFullYear(),d.getMonth()-i,1); months.push(t.toISOString().slice(0,7)); }
+  return months;
+}
+
+function drawBarChart(ctx, w, h, labels, vals, color) {
+  ctx.clearRect(0,0,w,h);
+  var n=labels.length; if(!n) return;
+  var max=Math.max.apply(null,vals)||1;
+  var pad=30,barW=Math.floor((w-pad*2)/n*0.6),gap=Math.floor((w-pad*2)/n);
+  vals.forEach(function(v,i) {
+    var bh=Math.round((v/max)*(h-50));
+    var x=pad+i*gap;
+    ctx.fillStyle=color; ctx.fillRect(x,h-30-bh,barW,bh);
+    ctx.fillStyle='#333'; ctx.font='10px Arial'; ctx.textAlign='center';
+    ctx.fillText(labels[i],x+barW/2,h-15);
+    if(v>0) ctx.fillText(v,x+barW/2,h-33-bh);
+  });
+}
+
+function drawLineChart(ctx, w, h, labels, vals, color) {
+  ctx.clearRect(0,0,w,h);
+  var n=labels.length; if(!n) return;
+  var max=Math.max.apply(null,vals)||1;
+  var pad=30,gap=(w-pad*2)/(n-1||1);
+  ctx.strokeStyle=color; ctx.lineWidth=2; ctx.beginPath();
+  vals.forEach(function(v,i) {
+    var x=pad+i*gap, y=h-30-Math.round((v/100)*(h-50));
+    if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+  });
+  ctx.stroke();
+  vals.forEach(function(v,i) {
+    var x=pad+i*gap, y=h-30-Math.round((v/100)*(h-50));
+    ctx.fillStyle=color; ctx.beginPath(); ctx.arc(x,y,3,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle='#333'; ctx.font='10px Arial'; ctx.textAlign='center';
+    ctx.fillText(labels[i],x,h-15);
+    if(v>0) ctx.fillText(v+'%',x,y-6);
+  });
+}
+
+// ============================================================
+//  Coach stats
+// ============================================================
+function renderCoach() {
+  var mf = document.getElementById('coachMonthFilter') ? document.getElementById('coachMonthFilter').value : '';
+  var pool = mf ? allStudents.filter(function(s){ return s.trialDate&&s.trialDate.startsWith(mf); }) : allStudents;
+
+  var coachMap = {};
+  pool.forEach(function(s) {
+    var c = s.coach||'未指定';
+    if (!coachMap[c]) coachMap[c]={c:c,total:0,enrolled:0,follow:0};
+    coachMap[c].total++;
+    if(s.convStatus==='enrolled') coachMap[c].enrolled++;
+    else if(!s.convStatus||s.convStatus==='follow') coachMap[c].follow++;
+  });
+  var rows = Object.values(coachMap).sort(function(a,b){ return b.total-a.total; });
+
+  var html='';
+  rows.forEach(function(r) {
+    var rate = r.total>0 ? (r.enrolled/r.total*100).toFixed(1) : '0.0';
+    html += '<tr data-coach="'+encodeURIComponent(r.c)+'">'
+      +'<td>'+r.c+'</td><td>'+r.total+'</td><td>'+r.enrolled+'</td>'
+      +'<td>'+(r.total-r.enrolled)+'</td><td>'+r.follow+'</td>'
+      +'<td>'+rate+'%</td>'
+      +'<td><div class="rate-bar"><div class="rate-fill" style="width:'+Math.min(100,parseFloat(rate))+'%;"></div></div></td>'
+      +'</tr>';
+  });
+  document.getElementById('coachTbody').innerHTML = html || '<tr><td colspan="7" style="text-align:center;color:#999;padding:16px;">暂无数据</td></tr>';
+
+  drawCoachChart(rows);
+}
+
+document.getElementById('coachTbody').addEventListener('click', function(e) {
+  var tr = e.target.closest('tr');
+  if (!tr || !tr.dataset.coach) return;
+  showCoachDetail(decodeURIComponent(tr.dataset.coach));
+});
+document.getElementById('coachMonthFilter').addEventListener('change', function(){ renderCoach(); });
+
+function showCoachDetail(coach) {
+  var pool = allStudents.filter(function(s){ return (s.coach||'未指定')===coach; });
+  document.getElementById('coachDetailTitle').textContent = '师父「'+coach+'」学员明细';
+  var html='';
+  pool.forEach(function(s,i) {
+    html += '<tr>'
+      +'<td>'+(i+1)+'</td><td>'+s.name+'</td><td>'+(s.age||'-')+'</td><td>'+(s.sex||'-')+'</td>'
+      +'<td>'+fmtDate(s.trialDate)+'</td>'
+      +'<td><span class="badge '+(STATUS_BADGE[s.convStatus]||'badge-unknown')+'">'+STATUS_LABEL[s.convStatus]+'</span></td>'
+      +'<td>'+((s.followUps&&s.followUps.length)||0)+'</td>'
+      +'<td><button class="btn btn-blue btn-sm do-detail" data-id="'+s.id+'">详情</button></td>'
+      +'</tr>';
+  });
+  document.getElementById('coachDetailTbody').innerHTML = html || '<tr><td colspan="8" style="text-align:center;color:#999;padding:16px;">暂无记录</td></tr>';
+  document.getElementById('coachDetail').style.display = 'block';
+}
+
+document.getElementById('coachDetailTbody').addEventListener('click', function(e) {
+  var btn = e.target.closest('.do-detail');
+  if (btn) openDetail(btn.dataset.id);
+});
+
+function drawCoachChart(rows) {
+  var canvas = document.getElementById('coachChart');
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+  canvas.width = canvas.parentElement.offsetWidth - 40;
+  var labels = rows.map(function(r){ return r.c.slice(0,6); });
+  var rates  = rows.map(function(r){ return r.total>0?parseFloat((r.enrolled/r.total*100).toFixed(1)):0; });
+  drawBarChart(ctx, canvas.width, 220, labels, rates, '#9a5a2a');
+}
 
 // ============================================================
 //  CSV export
 // ============================================================
-document.getElementById('exportBtn').addEventListener('click',function(){
-  var hdr=['ID','姓名','年龄','性别','联系电话','体验课日期','代课师父','是否报课','课程套餐','转化状态','跟进次数','下次跟进日期','备注'];
-  var rows=filteredStudents.map(function(s){ return [s.id,s.name||'',s.age||'',s.sex||'',s.contact||'',s.trialDate||'',s.coach||'',s.enroll||'',s.coursePackage||'',STATUS_LABEL[s.convStatus||'follow']||'',(s.followUps||[]).length,s.nextFollowDate||'',s.remark||'']; });
-  var csv=[hdr].concat(rows).map(function(r){ return r.map(function(v){ return '"'+String(v).replace(/"/g,'""')+'"'; }).join(','); }).join('\n');
-  var blob=new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8;'}), url=URL.createObjectURL(blob);
-  var a=document.createElement('a'); a.href=url; a.download='体验课学员_'+new Date().toISOString().slice(0,10)+'.csv'; a.click(); URL.revokeObjectURL(url); toast('✅ CSV 已导出');
+document.getElementById('exportBtn').addEventListener('click', function() {
+  var filtered = applyFilters(allStudents);
+  var BOM = '﻿';
+  var header = '姓名,年龄,性别,联系电话,体验课日期,代课师父,课程套餐,转化状态,跟进次数,下次跟进,备注
+';
+  var rows = filtered.map(function(s) {
+    return [s.name,s.age||'',s.sex||'',s.contact||'',fmtDate(s.trialDate),s.coach||'',
+      s.coursePackage||'',STATUS_LABEL[s.convStatus]||'',
+      (s.followUps&&s.followUps.length)||0,fmtDate(s.nextFollowDate),s.remark||'']
+      .map(function(v){ return '"'+String(v).replace(/"/g,'""')+'"'; }).join(',');
+  }).join('
+');
+  var blob = new Blob([BOM+header+rows],{type:'text/csv;charset=utf-8;'});
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = '体验课学员_'+new Date().toISOString().slice(0,10)+'.csv';
+  a.click();
 });
 
 // ============================================================
-//  Import pending record from index.html
-//  index.html writes to shaolin_trial_students directly now;
-//  this function handles legacy shaolin_pending_record key too
+//  Change password
 // ============================================================
-function importPending(){
-  try{
-    var raw=localStorage.getItem('shaolin_pending_record');
-    if(!raw) return;
-    var rec=JSON.parse(raw);
-    if(rec&&rec.name&&rec.trialDate){
-      var arr=loadStudents();
-      var dup=arr.find(function(s){ return s.name===rec.name&&s.trialDate===rec.trialDate; });
-      if(!dup){ arr.unshift(rec); saveStudents(arr); }
-    }
-  }catch(e){}
-  localStorage.removeItem('shaolin_pending_record');
-}
+document.getElementById('changePwdBtn').addEventListener('click', function(){
+  document.getElementById('curPwd').value='';
+  document.getElementById('newPwd').value='';
+  document.getElementById('newPwd2').value='';
+  document.getElementById('pwdModal').classList.add('open');
+});
+document.getElementById('pwdClose').addEventListener('click', function(){ closeModal('pwdModal'); });
+document.getElementById('pwdCancelBtn').addEventListener('click', function(){ closeModal('pwdModal'); });
+document.getElementById('savePwdBtn').addEventListener('click', function() {
+  var cur = document.getElementById('curPwd').value;
+  var np  = document.getElementById('newPwd').value;
+  var np2 = document.getElementById('newPwd2').value;
+  if (cur !== getStoredPwd()) { alert('当前密码不正确'); return; }
+  if (np.length < 6) { alert('新密码至少6位'); return; }
+  if (np !== np2) { alert('两次密码不一致'); return; }
+  localStorage.setItem(PWD_KEY, np);
+  closeModal('pwdModal');
+  toast('密码已修改');
+});
 </script>
 </body>
 </html>
