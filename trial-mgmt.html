@@ -1142,8 +1142,7 @@ function drawCoachChart(rows) {
 document.getElementById('exportBtn').addEventListener('click', function() {
   var filtered = applyFilters(allStudents);
   var BOM = '﻿';
-  var header = '姓名,年龄,性别,联系电话,体验课日期,代课师父,课程套餐,转化状态,跟进次数,下次跟进,备注
-';
+  var header = '姓名,年龄,性别,联系电话,体验课日期,代课师父,课程套餐,转化状态,跟进次数,下次跟进,备注\n';
   var rows = filtered.map(function(s) {
     return [s.name,s.age||'',s.sex||'',s.contact||'',fmtDate(s.trialDate),s.coach||'',
       s.coursePackage||'',STATUS_LABEL[s.convStatus]||'',
