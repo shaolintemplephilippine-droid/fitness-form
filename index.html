@@ -748,10 +748,9 @@ document.getElementById('generateBtn').addEventListener('click', async () => {
     link.download = `体能测试表_${name}_${dt}.png`;
     link.href = canvas.toDataURL('image/png');
     link.click();
-    const w = window.open('');
-    w.document.write('<img src="'+canvas.toDataURL('image/png')+'" style="display:block;margin:auto;">');
+    btn.textContent = '已下载 ✓';
   } catch(e) { alert('生成失败：'+e.message); }
-  finally { btn.textContent = txt; btn.disabled = false; }
+  finally { setTimeout(() => { btn.textContent = txt; btn.disabled = false; }, 1500); }
 });
 
 // 用学员数据直接刷新右侧预览（不改动左侧表单），供「全部导出」使用
@@ -1221,6 +1220,8 @@ document.getElementById('downloadReportBtn').addEventListener('click', async () 
   const card = document.getElementById('analysisCard');
   const btn = document.getElementById('downloadReportBtn');
   const noCaptureEls = card.querySelectorAll('.no-capture');
+  const txt = btn.textContent;
+  btn.disabled = true;
   noCaptureEls.forEach(el => el.style.display = 'none');
 
   try {
@@ -1234,10 +1235,12 @@ document.getElementById('downloadReportBtn').addEventListener('click', async () 
     link.download = `体能分析报告_${name}_${dt}.png`;
     link.href = canvas.toDataURL('image/png');
     link.click();
-    const w = window.open('');
-    w.document.write('<img src="'+canvas.toDataURL('image/png')+'" style="display:block;margin:auto;">');
+    btn.textContent = '已下载 ✓';
   } catch(e) { alert('生成失败：'+e.message); }
-  finally { noCaptureEls.forEach(el => el.style.display = ''); }
+  finally {
+    noCaptureEls.forEach(el => el.style.display = '');
+    setTimeout(() => { btn.textContent = txt; btn.disabled = false; }, 1500);
+  }
 });
 
 // 报告卡片上的导航：返回表单 / 关闭报告
