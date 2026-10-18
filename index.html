@@ -196,6 +196,29 @@ body {
 .detail-expand { margin-top:6px; padding:8px 12px; background:#fffbf5; border-left:3px solid #c4a882; border-radius:0 6px 6px 0; animation:fadeIn .2s ease; }
 @keyframes fadeIn { from{opacity:0;transform:translateY(-4px)} to{opacity:1;transform:none} }
 .req { color:#c62828; font-size:10px; }
+
+/* ===== 学员标签栏（多学员）===== */
+.student-tabs { display:flex; align-items:center; gap:6px; margin-bottom:10px; flex-wrap:wrap; }
+.stab-list { display:flex; gap:4px; flex-wrap:wrap; }
+.stab {
+  display:inline-flex; align-items:center; gap:5px;
+  padding:5px 8px 5px 10px; border:1.5px solid #c4a882; border-radius:8px;
+  background:#fdf9f2; color:#6b3a17; font-size:12px; cursor:pointer; user-select:none;
+  white-space:nowrap; max-width:140px;
+}
+.stab:hover { background:#f0e4d2; }
+.stab.active { background:#6b3a17; color:#fff; border-color:#6b3a17; }
+.stab .stab-name { overflow:hidden; text-overflow:ellipsis; }
+.stab .stab-x {
+  width:15px; height:15px; border-radius:50%; flex-shrink:0;
+  display:inline-flex; align-items:center; justify-content:center;
+  font-size:11px; line-height:1; opacity:.6;
+}
+.stab .stab-x:hover { opacity:1; background:rgba(107,58,23,.18); }
+.stab.active .stab-x:hover { background:rgba(255,255,255,.25); }
+#addStudentBtn { border:1.5px dashed #c4a882; background:#fff; color:#6b3a17; flex:none; }
+#addStudentBtn:hover:not(:disabled) { background:#f0e4d2; }
+#addStudentBtn:disabled { opacity:.4; cursor:not-allowed; }
 </style>
 </head>
 <body>
@@ -222,6 +245,12 @@ body {
       <div class="field"><label>时间 Time</label><input id="time" type="time"></div>
     </fieldset>
 
+    <!-- 学员标签栏（多学员切换，基础信息共用） -->
+    <div class="student-tabs">
+      <div class="stab-list" id="stabList"></div>
+      <button type="button" class="btn btn-sm" id="addStudentBtn">＋ 添加学员</button>
+    </div>
+
     <fieldset>
       <legend>学员信息（必填 ⚠️ 用于分析）</legend>
       <div class="field"><label>姓名 Name</label><input id="name" type="text" placeholder="学员姓名"></div>
@@ -233,6 +262,18 @@ body {
       <div class="row-2">
         <div class="field"><label>体重 Weight (kg)</label><input id="weight" type="number" step="0.1" placeholder="kg"></div>
         <div class="field"><label>联系电话 Contact</label><input id="contact" type="tel" placeholder="手机号"></div>
+      </div>
+      <div class="field">
+        <label>国籍 Nationality</label>
+        <div style="display:flex; gap:6px;">
+          <select id="nationality" style="flex:1;">
+            <option value="">请选择</option>
+            <option value="Filipino">Filipino（菲律宾）</option>
+            <option value="Chinese">Chinese（中国）</option>
+            <option value="Other">Other（其他）</option>
+          </select>
+          <input id="nationalityOther" type="text" placeholder="填写国籍" style="display:none; flex:1;">
+        </div>
       </div>
       <div class="field" style="margin-top:8px;"><label>紧急联系人 Emergency Contact</label><input id="emergencyContact" type="tel" placeholder="姓名 + 手机号"></div>
     </fieldset>
@@ -292,6 +333,7 @@ body {
     <div class="actions">
       <button class="btn btn-secondary" id="resetBtn">重 置</button>
       <button class="btn btn-primary" id="generateBtn">生成测试表图片</button>
+      <button class="btn btn-accent" id="exportAllBtn" style="background:#8b4d22;" title="按学员逐个导出 PNG 图片">📦 全部导出</button>
     </div>
     <div class="actions">
       <button class="btn btn-accent" id="analysisBtn">生成体能分析报告</button>
@@ -345,6 +387,12 @@ body {
             <td colspan="2"><span id="pContact" class="empty">　　　</span></td>
             <td class="label-cell" colspan="2"><span class="cn">是否报课</span><span class="en">Enroll</span></td>
             <td colspan="2"><span id="pEnroll" class="empty">　　　</span></td>
+          </tr>
+          <tr>
+            <td class="label-cell"><span class="cn">国籍</span><span class="en">Nationality</span></td>
+            <td colspan="2"><span id="pNationality" class="empty">　　　</span></td>
+            <td class="label-cell" colspan="2"><span class="cn">是否报课</span><span class="en">Enroll</span></td>
+            <td colspan="2"><span id="pEnroll2" class="empty">　　　</span></td>
           </tr>
           <tr>
             <td class="label-cell" colspan="3"><span class="cn">紧急联系人</span><span class="en">Emergency Contact</span></td>
@@ -427,22 +475,59 @@ const fields = [
   ['name','pName'],['age','pAge'],['sex','pSex'],['height','pHeight'],
   ['congDisease','pCongDisease'],['surgery','pSurgery'],
   ['weight','pWeight'],['exerciseBg','pExerciseBg'],
-  ['contact','pContact'],['emergencyContact','pEmergencyContact'],
+  ['contact','pContact'],['nationality','pNationality'],['emergencyContact','pEmergencyContact'],
   ['pushup','pPushup'],['situp','pSitup'],['leap','pLeap'],
   ['squat','pSquat'],['sprint','pSprint'],['plank','pPlank'],
   ['expectation','pExpectation'],['impression','pImpression'],
 ];
 
+// 国籍组合显示：Other 时使用手填内容
+function getNationalityDisplay() {
+  const nat = document.getElementById('nationality').value;
+  if (!nat) return '';
+  if (nat === 'Other') {
+    return document.getElementById('nationalityOther').value.trim() || 'Other';
+  }
+  return nat;
+}
+
+function getFieldDisplay(id) {
+  if (id === 'nationality') return getNationalityDisplay();
+  const el = document.getElementById(id);
+  return el ? el.value.trim() : '';
+}
+
+function setPreview(preview, v) {
+  if (v) { preview.textContent = v; preview.classList.remove('empty'); }
+  else { preview.innerHTML = '　　　'; preview.classList.add('empty'); }
+}
+
 fields.forEach(([id, pid]) => {
   const el = document.getElementById(id);
   const preview = document.getElementById(pid);
   if (!el || !preview) return;
-  el.addEventListener('input', () => {
-    const v = el.value.trim();
-    if (v) { preview.textContent = v; preview.classList.remove('empty'); }
-    else { preview.innerHTML = '　　　'; preview.classList.add('empty'); }
-  });
+  const sync = () => setPreview(preview, getFieldDisplay(id));
+  el.addEventListener('input', sync);
+  el.addEventListener('change', sync);
 });
+
+// 国籍选 Other 时显示手填框
+const natSel = document.getElementById('nationality');
+const natOther = document.getElementById('nationalityOther');
+natSel.addEventListener('change', () => {
+  natOther.style.display = natSel.value === 'Other' ? '' : 'none';
+  if (natSel.value !== 'Other') natOther.value = '';
+});
+natOther.addEventListener('input', () => {
+  setPreview(document.getElementById('pNationality'), getNationalityDisplay());
+});
+
+function updatePreview() {
+  fields.forEach(([id, pid]) => {
+    const preview = document.getElementById(pid);
+    if (preview) setPreview(preview, getFieldDisplay(id));
+  });
+}
 
 // ============================================================
 //  1b. 第一印象词汇标签（点击即填）
@@ -502,43 +587,149 @@ impressionWords.forEach(w => {
 });
 
 // 监听手动修改 textarea，同步高亮标签
-impTA.addEventListener('input', () => {
+impTA.addEventListener('input', syncImpressionTags);
+
+// ============================================================
+//  1c. 多学员标签系统
+//  基础信息（教练/日期/时间）全局共用；其余字段按学员独立保存
+// ============================================================
+const STUDENT_FIELDS = [
+  'name','age','sex','height','weight','contact','nationality','nationalityOther',
+  'emergencyContact','congDisease','congDiseaseText','surgery','surgeryType','surgeryDate',
+  'exerciseBg','exerciseBgText','pushup','situp','leap','squat','sprint','plank',
+  'expectation','impression'
+];
+const MAX_STUDENTS = 4;
+
+function newStudent() {
+  const s = {};
+  STUDENT_FIELDS.forEach(f => s[f] = '');
+  return s;
+}
+
+let students = [newStudent()];
+let activeIdx = 0;
+
+function collectForm() {
+  const s = {};
+  STUDENT_FIELDS.forEach(f => {
+    const el = document.getElementById(f);
+    s[f] = el ? el.value : '';
+  });
+  return s;
+}
+
+// 根据 textarea 内容同步词汇标签高亮
+function syncImpressionTags() {
   const typed = impTA.value;
-  // 按顿号或逗号拆出已输入的词
   const typedWords = new Set(typed.split(/[,，、]/).map(s => s.trim()).filter(Boolean));
-  // 同步标签高亮
   activeWords.clear();
   impBank.querySelectorAll('.tag').forEach(tag => {
     const w = tag.dataset.word;
-    if (typedWords.has(w)) {
-      tag.classList.add('active');
-      activeWords.add(w);
-    } else {
-      tag.classList.remove('active');
+    if (typedWords.has(w)) { tag.classList.add('active'); activeWords.add(w); }
+    else tag.classList.remove('active');
+  });
+}
+
+function applyDetailVisibility() {
+  [['congDisease','congDiseaseDetail'],['surgery','surgeryDetail'],['exerciseBg','exerciseBgDetail']]
+    .forEach(([selId, boxId]) => {
+      const sel = document.getElementById(selId);
+      const box = document.getElementById(boxId);
+      if (sel && box) box.style.display = sel.value === '有' ? 'block' : 'none';
+    });
+  natOther.style.display = document.getElementById('nationality').value === 'Other' ? '' : 'none';
+}
+
+function loadForm(s) {
+  STUDENT_FIELDS.forEach(f => {
+    const el = document.getElementById(f);
+    if (el) el.value = s[f] || '';
+  });
+  applyDetailVisibility();
+  syncImpressionTags();
+}
+
+function renderTabs() {
+  const list = document.getElementById('stabList');
+  list.innerHTML = '';
+  students.forEach((s, i) => {
+    const tab = document.createElement('div');
+    tab.className = 'stab' + (i === activeIdx ? ' active' : '');
+    const nameSpan = document.createElement('span');
+    nameSpan.className = 'stab-name';
+    nameSpan.textContent = (s.name || '').trim() ? s.name : ('学员' + (i + 1));
+    tab.appendChild(nameSpan);
+    if (students.length > 1) {
+      const x = document.createElement('span');
+      x.className = 'stab-x';
+      x.textContent = '×';
+      x.title = '删除该学员';
+      x.addEventListener('click', (e) => { e.stopPropagation(); closeTab(i); });
+      tab.appendChild(x);
     }
+    tab.addEventListener('click', () => switchTab(i));
+    list.appendChild(tab);
   });
+  document.getElementById('addStudentBtn').disabled = students.length >= MAX_STUDENTS;
+}
+
+function switchTab(i) {
+  if (i === activeIdx) return;
+  students[activeIdx] = collectForm();   // 保存当前学员，切回不丢数据
+  activeIdx = i;
+  loadForm(students[activeIdx]);
+  updatePreview();
+  renderTabs();
+  document.getElementById('analysisCard').style.display = 'none';
+}
+
+document.getElementById('addStudentBtn').addEventListener('click', () => {
+  if (students.length >= MAX_STUDENTS) { alert('最多同时录入 ' + MAX_STUDENTS + ' 个学员。'); return; }
+  students[activeIdx] = collectForm();
+  students.push(newStudent());
+  activeIdx = students.length - 1;
+  loadForm(students[activeIdx]);
+  updatePreview();
+  renderTabs();
+  document.getElementById('analysisCard').style.display = 'none';
+  document.getElementById('name').focus();
 });
 
-// 重置时清空标签状态（hook 到 reset 逻辑之后）
-const origReset = document.getElementById('resetBtn').onclick;
-document.getElementById('resetBtn').addEventListener('click', () => {
-  setTimeout(() => {
-    activeWords.clear();
-    impBank.querySelectorAll('.tag').forEach(t => t.classList.remove('active'));
-  }, 50);
+function closeTab(i) {
+  const label = (students[i].name || '').trim() || ('学员' + (i + 1));
+  if (!confirm('确认删除「' + label + '」吗？\n该学员已填写的数据将被清空。')) return;
+  const wasActive = (i === activeIdx);
+  students.splice(i, 1);
+  if (wasActive) {
+    activeIdx = Math.min(i, students.length - 1);
+    loadForm(students[activeIdx]);
+    updatePreview();
+    document.getElementById('analysisCard').style.display = 'none';
+  } else if (i < activeIdx) {
+    activeIdx--;
+  }
+  renderTabs();
+}
+
+// 姓名输入时，标签自动变为姓名
+document.getElementById('name').addEventListener('input', () => {
+  const nameSpan = document.querySelectorAll('#stabList .stab-name')[activeIdx];
+  if (nameSpan) nameSpan.textContent = document.getElementById('name').value.trim() || ('学员' + (activeIdx + 1));
 });
 
-// 重置
+// 重置（仅清空当前学员，其他学员与基础信息不受影响）
 document.getElementById('resetBtn').addEventListener('click', () => {
-  if (!confirm('确认要清空所有已填写的内容吗？')) return;
-  fields.forEach(([id, pid]) => {
-    const el = document.getElementById(id);
-    const preview = document.getElementById(pid);
-    if (el) el.value = '';
-    if (preview) { preview.innerHTML = '　　　'; preview.classList.add('empty'); }
-  });
+  const label = (students[activeIdx].name || '').trim() || ('学员' + (activeIdx + 1));
+  if (!confirm('确认要清空「' + label + '」已填写的内容吗？\n其他学员与基础信息不受影响。')) return;
+  students[activeIdx] = newStudent();
+  loadForm(students[activeIdx]);
+  updatePreview();
+  renderTabs();
   document.getElementById('analysisCard').style.display = 'none';
 });
+
+renderTabs();
 
 // 生成测试表图片
 document.getElementById('generateBtn').addEventListener('click', async () => {
@@ -559,6 +750,56 @@ document.getElementById('generateBtn').addEventListener('click', async () => {
     w.document.write('<img src="'+canvas.toDataURL('image/png')+'" style="display:block;margin:auto;">');
   } catch(e) { alert('生成失败：'+e.message); }
   finally { btn.textContent = txt; btn.disabled = false; }
+});
+
+// 用学员数据直接刷新右侧预览（不改动左侧表单），供「全部导出」使用
+function renderPreviewFromData(s) {
+  fields.forEach(([id, pid]) => {
+    const preview = document.getElementById(pid);
+    if (!preview) return;
+    let v;
+    if (id === 'coach' || id === 'date' || id === 'time') {
+      const el = document.getElementById(id);
+      v = el ? el.value.trim() : '';
+    } else if (id === 'nationality') {
+      const nat = s.nationality || '';
+      v = !nat ? '' : (nat === 'Other' ? ((s.nationalityOther || '').trim() || 'Other') : nat);
+    } else {
+      v = (s[id] || '').trim();
+    }
+    setPreview(preview, v);
+  });
+}
+
+// 全部导出：逐个学员各导出一张 PNG（基础信息共用，只读当前表单）
+document.getElementById('exportAllBtn').addEventListener('click', async () => {
+  if (typeof html2canvas === 'undefined') { alert('导出组件尚未加载完成，请稍候重试。'); return; }
+  if (students.length < 2) { alert('当前只有 1 个学员，直接使用「生成测试表图片」即可。'); return; }
+  const btn = document.getElementById('exportAllBtn');
+  const txt = btn.textContent;
+  btn.disabled = true;
+  const dt = document.getElementById('date').value || new Date().toISOString().slice(0,10);
+  try {
+    for (let i = 0; i < students.length; i++) {
+      btn.textContent = '正在导出 ' + (i+1) + '/' + students.length + '...';
+      const data = (i === activeIdx) ? collectForm() : students[i];
+      renderPreviewFromData(data);
+      await new Promise(r => setTimeout(r, 80));
+      const canvas = await html2canvas(document.getElementById('formCard'), {
+        scale: 2, backgroundColor: '#ffffff', useCORS: true, logging: false,
+      });
+      const name = (data.name || '').trim() || ('学员' + (i+1));
+      const link = document.createElement('a');
+      link.download = `体能测试表_${name}_${dt}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+      await new Promise(r => setTimeout(r, 400));
+    }
+  } catch(e) { alert('导出失败：' + e.message); }
+  finally {
+    btn.textContent = txt; btn.disabled = false;
+    updatePreview();  // 恢复当前学员预览
+  }
 });
 
 // ============================================================
