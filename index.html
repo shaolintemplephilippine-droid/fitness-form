@@ -178,6 +178,9 @@ body {
 .suggestions li::marker { color:#b76d2c; }
 
 .analysis-actions { text-align:center; margin-top:8px; padding-bottom:4px; }
+.analysis-actions .btn { margin:2px 4px; }
+#backToFormBtn { background:#e0d7cb; color:#6b3a17; }
+#closeReportBtn { background:#c62828; color:#fff; }
 .no-capture { /* 截图时隐藏 */ }
 
 /* ===== 顶部导航（体验课学员管理入口）===== */
@@ -460,7 +463,9 @@ body {
         <ul id="suggestionList"><li>请先填写体能数据并点击"生成体能分析报告"</li></ul>
       </div>
       <div class="analysis-actions no-capture">
+        <button class="btn btn-sm" id="backToFormBtn">↑ 返回填写信息</button>
         <button class="btn btn-sm btn-accent" id="downloadReportBtn" style="display:none;">下载分析报告图片</button>
+        <button class="btn btn-sm" id="closeReportBtn">✕ 关闭报告</button>
       </div>
     </div>
   </div>
@@ -681,7 +686,6 @@ function switchTab(i) {
   loadForm(students[activeIdx]);
   updatePreview();
   renderTabs();
-  document.getElementById('analysisCard').style.display = 'none';
 }
 
 document.getElementById('addStudentBtn').addEventListener('click', () => {
@@ -692,7 +696,6 @@ document.getElementById('addStudentBtn').addEventListener('click', () => {
   loadForm(students[activeIdx]);
   updatePreview();
   renderTabs();
-  document.getElementById('analysisCard').style.display = 'none';
   document.getElementById('name').focus();
 });
 
@@ -705,7 +708,6 @@ function closeTab(i) {
     activeIdx = Math.min(i, students.length - 1);
     loadForm(students[activeIdx]);
     updatePreview();
-    document.getElementById('analysisCard').style.display = 'none';
   } else if (i < activeIdx) {
     activeIdx--;
   }
@@ -1236,6 +1238,14 @@ document.getElementById('downloadReportBtn').addEventListener('click', async () 
     w.document.write('<img src="'+canvas.toDataURL('image/png')+'" style="display:block;margin:auto;">');
   } catch(e) { alert('生成失败：'+e.message); }
   finally { noCaptureEls.forEach(el => el.style.display = ''); }
+});
+
+// 报告卡片上的导航：返回表单 / 关闭报告
+document.getElementById('backToFormBtn').addEventListener('click', () => {
+  document.querySelector('.form-panel').scrollIntoView({ behavior:'smooth', block:'start' });
+});
+document.getElementById('closeReportBtn').addEventListener('click', () => {
+  document.getElementById('analysisCard').style.display = 'none';
 });
 
 // ============================================================
