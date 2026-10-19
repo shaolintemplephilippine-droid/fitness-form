@@ -471,6 +471,18 @@ body {
   </div>
 </div>
 
+<!-- 图片生成结果预览（含 iPad/手机「存储到相册」指引） -->
+<div id="imgPreviewModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,.75); z-index:9999; overflow:auto; padding:24px 12px;">
+  <div style="max-width:740px; margin:0 auto; background:#fff; border-radius:12px; padding:16px;">
+    <div id="imgPreviewHint" style="font-size:13px; color:#6b3a17; line-height:1.9; margin-bottom:10px; background:#fdf9f2; border:1px dashed #c4a882; border-radius:8px; padding:10px 12px;"></div>
+    <img id="imgPreviewImg" style="width:100%; display:block; border:1px solid #e0d7cb; border-radius:6px;" alt="生成的图片">
+    <div style="text-align:center; margin-top:12px;">
+      <a id="imgPreviewDownload" class="btn btn-primary" style="display:inline-block; text-decoration:none; margin:2px 4px;" download>下载 PNG 文件</a>
+      <button class="btn" id="imgPreviewClose" style="background:#e0d7cb; color:#6b3a17; margin:2px 4px;">✕ 关闭</button>
+    </div>
+  </div>
+</div>
+
 <script>
 // ============================================================
 //  1. 实时预览联动（测试表）
@@ -738,19 +750,28 @@ document.getElementById('generateBtn').addEventListener('click', async () => {
   const btn = document.getElementById('generateBtn');
   const txt = btn.textContent;
   btn.textContent = '正在生成...'; btn.disabled = true;
+  let done = false;
+  const restore = () => {
+    if (done) return;
+    done = true;
+    clearTimeout(safety);
+    btn.textContent = txt; btn.disabled = false;
+  };
+  // 保险丝：即使截图组件卡住/无响应，也保证按钮恢复可用
+  const safety = setTimeout(restore, 20000);
   try {
     const canvas = await html2canvas(document.getElementById('formCard'), {
       scale: 2, backgroundColor: '#ffffff', useCORS: true, logging: false,
     });
     const name = document.getElementById('name').value.trim() || '学员';
     const dt = document.getElementById('date').value || new Date().toISOString().slice(0,10);
-    const link = document.createElement('a');
-    link.download = `体能测试表_${name}_${dt}.png`;
-    link.href = canvas.toDataURL('image/png');
-    link.click();
-    btn.textContent = '已下载 ✓';
-  } catch(e) { alert('生成失败：'+e.message); }
-  finally { setTimeout(() => { btn.textContent = txt; btn.disabled = false; }, 1500); }
+    const dataUrl = canvas.toDataURL('image/png');
+    const filename = `体能测试表_${name}_${dt}.png`;
+    restore();
+    btn.textContent = '已生成 ✓';
+    setTimeout(() => { if (btn.textContent === '已生成 ✓') btn.textContent = txt; }, 1500);
+    showImagePreview(dataUrl, filename);
+  } catch(e) { restore(); alert('生成失败：'+e.message); }
 });
 
 // 用学员数据直接刷新右侧预览（不改动左侧表单），供「全部导出」使用
@@ -780,6 +801,12 @@ document.getElementById('exportAllBtn').addEventListener('click', async () => {
   const txt = btn.textContent;
   btn.disabled = true;
   const dt = document.getElementById('date').value || new Date().toISOString().slice(0,10);
+  const restore = () => {
+    btn.textContent = txt; btn.disabled = false;
+    updatePreview();  // 恢复当前学员预览
+  };
+  // 保险丝：截图组件卡住/无响应时，30 秒后强制恢复页面与预览
+  const safety = setTimeout(restore, 30000);
   try {
     for (let i = 0; i < students.length; i++) {
       btn.textContent = '正在导出 ' + (i+1) + '/' + students.length + '...';
@@ -797,10 +824,7 @@ document.getElementById('exportAllBtn').addEventListener('click', async () => {
       await new Promise(r => setTimeout(r, 400));
     }
   } catch(e) { alert('导出失败：' + e.message); }
-  finally {
-    btn.textContent = txt; btn.disabled = false;
-    updatePreview();  // 恢复当前学员预览
-  }
+  finally { clearTimeout(safety); restore(); }
 });
 
 // ============================================================
@@ -1219,36 +1243,78 @@ function runAnalysis() {
 document.getElementById('downloadReportBtn').addEventListener('click', async () => {
   const card = document.getElementById('analysisCard');
   const btn = document.getElementById('downloadReportBtn');
-  const noCaptureEls = card.querySelectorAll('.no-capture');
   const txt = btn.textContent;
   btn.disabled = true;
-  noCaptureEls.forEach(el => el.style.display = 'none');
+  btn.textContent = '正在生成...';
+
+  // 克隆报告卡片到屏幕外进行截图：全程不隐藏原页面按钮，
+  // 即使截图组件异常，页面上的「返回填写信息 / 关闭报告」也不受影响
+  const clone = card.cloneNode(true);
+  clone.querySelectorAll('.no-capture').forEach(el => el.remove());
+  const srcCanvases = card.querySelectorAll('canvas');
+  clone.querySelectorAll('canvas').forEach((c, i) => {
+    if (srcCanvases[i]) c.getContext('2d').drawImage(srcCanvases[i], 0, 0);
+  });
+  clone.style.position = 'fixed';
+  clone.style.left = '-10000px';
+  clone.style.top = '0';
+  clone.style.width = card.offsetWidth + 'px';
+  document.body.appendChild(clone);
+
+  let done = false;
+  const restore = () => {
+    if (done) return;
+    done = true;
+    clearTimeout(safety);
+    if (clone.parentNode) clone.parentNode.removeChild(clone);
+    btn.textContent = txt;
+    btn.disabled = false;
+  };
+  // 保险丝：截图组件卡住/无响应时，20 秒后强制恢复页面
+  const safety = setTimeout(restore, 20000);
 
   try {
-    // 确保雷达图已绘制
-    const canvas = await html2canvas(card, {
+    const canvas = await html2canvas(clone, {
       scale: 2, backgroundColor: '#ffffff', useCORS: true, logging: false,
     });
     const name = document.getElementById('name').value.trim() || '学员';
     const dt = document.getElementById('date').value || new Date().toISOString().slice(0,10);
-    const link = document.createElement('a');
-    link.download = `体能分析报告_${name}_${dt}.png`;
-    link.href = canvas.toDataURL('image/png');
-    link.click();
-    btn.textContent = '已下载 ✓';
-  } catch(e) { alert('生成失败：'+e.message); }
-  finally {
-    noCaptureEls.forEach(el => el.style.display = '');
-    setTimeout(() => { btn.textContent = txt; btn.disabled = false; }, 1500);
-  }
+    const dataUrl = canvas.toDataURL('image/png');
+    const filename = `体能分析报告_${name}_${dt}.png`;
+    restore();
+    btn.textContent = '已生成 ✓';
+    setTimeout(() => { if (btn.textContent === '已生成 ✓') btn.textContent = txt; }, 1500);
+    showImagePreview(dataUrl, filename);
+  } catch(e) { restore(); alert('生成失败：'+e.message); }
 });
 
 // 报告卡片上的导航：返回表单 / 关闭报告
-document.getElementById('backToFormBtn').addEventListener('click', () => {
-  document.querySelector('.form-panel').scrollIntoView({ behavior:'smooth', block:'start' });
+document.getElementById('backToFormBtn').addEventListener('click', (e) => {
+  e.preventDefault();
+  // 延迟到焦点滚动之后再执行，避免浏览器「保持焦点按钮可见」的自动滚动抢占目标位置
+  setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 30);
 });
 document.getElementById('closeReportBtn').addEventListener('click', () => {
   document.getElementById('analysisCard').style.display = 'none';
+});
+
+// 生成图片后弹出预览：iPad/手机「长按图片 → 存储到照片」进相册；电脑点按钮下载
+function showImagePreview(dataUrl, filename) {
+  const isTouch = ('ontouchstart' in window) || navigator.maxTouchPoints > 0;
+  document.getElementById('imgPreviewImg').src = dataUrl;
+  const dl = document.getElementById('imgPreviewDownload');
+  dl.href = dataUrl;
+  dl.download = filename;
+  document.getElementById('imgPreviewHint').innerHTML = isTouch
+    ? '图片已生成 ✅<br>① <b>存入相册</b>：<b>长按</b>上方图片 → 选「存储到“照片”」<br>② <b>存成文件</b>：点下方「下载 PNG」，之后在「文件」App 的「下载项」里找'
+    : '图片已生成 ✅ 点击下方按钮保存 PNG 文件，或在图片上右键「图片另存为」。';
+  document.getElementById('imgPreviewModal').style.display = 'block';
+}
+document.getElementById('imgPreviewClose').addEventListener('click', () => {
+  document.getElementById('imgPreviewModal').style.display = 'none';
+});
+document.getElementById('imgPreviewModal').addEventListener('click', (e) => {
+  if (e.target === e.currentTarget) e.currentTarget.style.display = 'none';
 });
 
 // ============================================================
